@@ -185,10 +185,14 @@ html, body
         background-image linear-gradient(-45deg, rgba(0,0,0,.5) 0%, transparent 100%);
         box-shadow 0 0.4rem 0.6rem .3rem var(--background)
         animation idle 1s 0s infinite ease-in-out alternate
-        transition height 1s, width 1s, top 1s
+        transition height 1s, width 1s, opacity .5s
       &.exit::after
+        top .2rem
+        animation none
+        box-shadow none
         width 0
         height 0
+        opacity 0
 
       &.right
         // transform rotate(90deg)
