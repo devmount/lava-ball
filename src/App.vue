@@ -131,6 +131,7 @@ export default {
   --available #222
   --target gold
   --unit 64px
+  --material-carbon radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px
 
 html, body
   padding 0
@@ -160,7 +161,7 @@ html, body
       flex-direction column
 
       .cell
-        background radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px
+        background var(--material-carbon)
         background-color #282828
         background-size 16px 16px
         width 1rem
@@ -170,14 +171,15 @@ html, body
         font-size 16px // for debug purposes
         color white // for debug purposes
 
-        &.blocked:not(.start)
-          background var(--background)
-          border-top .2rem solid #333
-          border-left .2rem solid #333
-          border-bottom .2rem solid #111
-          border-right .2rem solid #111
-          &.background
+        &.blocked
+          &:not(.start)
+            background var(--background)
             border none
+          &:not(.start):not(.background)
+            border-top .2rem solid #333
+            border-left .2rem solid #333
+            border-bottom .2rem solid #111
+            border-right .2rem solid #111
         &.target
           background var(--target)
 
