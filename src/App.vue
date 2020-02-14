@@ -5,8 +5,14 @@
         <div
           v-for="(x, j) in map.x+2"
           class="cell"
-          :class="{ 'blocked': isBlocked(i, j), 'target': isTarget(i, j) }"
-        ></div>
+          :class="{
+            'blocked': isBlocked(i, j),
+            'background': isBackground(i, j),
+            'target': isTarget(i, j),
+          }"
+        >
+        <!-- {{i}},{{j}} -->
+        </div>
       </div>
       <div :class="'player ' + lastDirection + ' ' + isFinished" ref="p"></div>
     </div>
@@ -25,7 +31,8 @@ export default {
     return {
       map: {
         x: 10, y: 10,
-        blocked: [{x:1,y:1}, {x:1,y:2}, {x:2,y:1}, {x:5,y:5}, {x:6,y:5}, {x:5,y:6}, {x:6,y:6}, {x:10,y:10}],
+        blocked: [{x:1,y:1}, {x:1,y:2}, {x:2,y:1}, {x:4,y:4}, {x:5,y:4}, {x:4,y:5}, {x:6,y:4}, {x:4,y:6}, {x:5,y:5}, {x:6,y:5}, {x:5,y:6}, {x:6,y:6}, {x:8,y:2}, {x:8,y:3}, {x:9,y:3}, {x:10,y:10}],
+        background: [{x:0,y:0}, {x:0,y:1}, {x:1,y:0}, {x:5,y:5}, {x:11,y:11}],
         target: {x:9,y:2}
       },
       p: {x:1,y:10},
@@ -42,6 +49,15 @@ export default {
       for (let i = 0; i < this.map.blocked.length; i++) {
         const block = this.map.blocked[i]
         if (JSON.stringify(block) === JSON.stringify({x:x,y:y}) || x==0 || y==0 || x==this.map.x+1 || y==this.map.y+1) {
+          return true
+        }
+      }
+      return false
+    },
+    isBackground (x, y) {
+      for (let i = 0; i < this.map.background.length; i++) {
+        const b = this.map.background[i]
+        if (JSON.stringify(b) === JSON.stringify({x:x,y:y})) {
           return true
         }
       }
@@ -135,6 +151,8 @@ html, body
         height 1rem
         box-sizing border-box
         border 1px solid var(--available)
+        font-size 16px // for debug purposes
+        color white // for debug purposes
 
         &.blocked
           background var(--background)
@@ -142,6 +160,8 @@ html, body
           border-left .2rem solid #333
           border-bottom .2rem solid #111
           border-right .2rem solid #111
+          &.background
+            border none
         &.target
           background var(--target)
 
