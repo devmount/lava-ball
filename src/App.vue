@@ -8,6 +8,7 @@
           :class="{
             'blocked': isBlocked(i, j),
             'background': isBackground(i, j),
+            'start': isStart(i, j) && init,
             'target': isTarget(i, j),
           }"
         >
@@ -15,6 +16,9 @@
         </div>
       </div>
       <div :class="'player ' + lastDirection + ' ' + isFinished" ref="p"></div>
+    </div>
+    <div id="controls">
+      <button @click="reset">Reset</button>
     </div>
   </div>
 </template>
@@ -33,9 +37,11 @@ export default {
         x: 10, y: 10,
         blocked: [{x:1,y:1}, {x:1,y:2}, {x:2,y:1}, {x:4,y:4}, {x:5,y:4}, {x:4,y:5}, {x:6,y:4}, {x:4,y:6}, {x:5,y:5}, {x:6,y:5}, {x:5,y:6}, {x:6,y:6}, {x:8,y:2}, {x:8,y:3}, {x:9,y:3}, {x:10,y:10}],
         background: [{x:0,y:0}, {x:0,y:1}, {x:1,y:0}, {x:5,y:5}, {x:11,y:11}],
+        start: {x:0,y:10},
         target: {x:9,y:2}
       },
-      p: {x:1,y:10},
+      init: true,
+      p: {x:0,y:10},
       lastDirection: 'right'
     }
   },
@@ -63,10 +69,14 @@ export default {
       }
       return false
     },
+    isStart (x, y) {
+      return JSON.stringify(this.map.start) === JSON.stringify({x:x,y:y}) 
+    },
     isTarget (x, y) {
       return JSON.stringify(this.map.target) === JSON.stringify({x:x,y:y}) 
     },
     go (x, y) {
+      this.init = false
       this.p.x = x
       this.p.y = y
       this.$refs.p.style.left = (x*64) + 'px'
@@ -95,6 +105,12 @@ export default {
       if (!this.isBlocked(this.p.x, this.p.y+1) && this.p.y < this.map.y) {
         this.go(this.p.x, this.p.y+1)
       }
+    },
+    reset () {
+      this.p.x = this.map.start.x
+      this.p.y = this.map.start.y
+      this.go(this.p.x, this.p.y)
+      this.init = true
     }
   },
   computed: {
@@ -154,7 +170,7 @@ html, body
         font-size 16px // for debug purposes
         color white // for debug purposes
 
-        &.blocked
+        &.blocked:not(.start)
           background var(--background)
           border-top .2rem solid #333
           border-left .2rem solid #333
@@ -175,19 +191,19 @@ html, body
         content ''
         display inline-block
         position absolute
-        top 0
+        top .15rem
         left 50%
         transform translate(-50%)
         width .6rem
         height .6rem
         border-radius 50%
-        background-color #3b4ba3
-        background-image linear-gradient(-45deg, rgba(0,0,0,.5) 0%, transparent 100%);
+        background-color #a3533b
+        background-image linear-gradient(-45deg, rgba(0,0,0,.6) 0%, transparent 100%);
         box-shadow 0 0.4rem 0.6rem .3rem var(--background)
         animation idle 1s 0s infinite ease-in-out alternate
         transition height 1s, width 1s, opacity .5s
       &.exit::after
-        top .2rem
+        top .3rem
         animation none
         box-shadow none
         width 0
@@ -202,9 +218,13 @@ html, body
         // transform rotate(0deg)
       &.down
         // transform rotate(180deg)
+  #controls
+    margin-left 2rem
+    padding .5rem
+    background var(--available)
 
 @keyframes idle
-  from { top: 0;      box-shadow 0 0.4rem 0.6rem -0.05rem var(--background); }
-  to   { top: .15rem; box-shadow 0 0.15rem 0.6rem -0.05rem var(--background); }
+  from { top: .15rem; box-shadow 0 0.15rem 0.6rem -0.05rem var(--background); }
+  to   { top: 0;      box-shadow 0 0.4rem 0.6rem -0.05rem var(--background); }
 
 </style>
