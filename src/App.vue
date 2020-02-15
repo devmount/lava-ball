@@ -18,7 +18,7 @@
       <div :class="'player ' + lastDirection + ' ' + isFinished" ref="p"></div>
     </div>
     <div id="controls">
-      <button @click="reset">Reset</button>
+      <button @click="restart">Restart</button>
     </div>
   </div>
 </template>
@@ -106,7 +106,7 @@ export default {
         this.go(this.p.x, this.p.y+1)
       }
     },
-    reset () {
+    restart () {
       this.p.x = this.map.start.x
       this.p.y = this.map.start.y
       this.go(this.p.x, this.p.y)
@@ -170,6 +170,7 @@ html, body
         border 1px solid var(--available)
         font-size 16px // for debug purposes
         color white // for debug purposes
+        transition all .5s
 
         &.blocked
           &:not(.start)
