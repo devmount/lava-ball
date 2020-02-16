@@ -18,7 +18,7 @@
       <div :class="'player ' + lastDirection + ' ' + isFinished" ref="p"></div>
     </div>
     <div id="controls">
-      <button @click="restart">Restart</button>
+      <button class="btn" @click="restart">Restart</button>
     </div>
   </div>
 </template>
@@ -126,23 +126,24 @@ export default {
 </script>
 
 <style lang="stylus">
-:root
-  --background #000
-  --available #222
-  --target gold
-  --unit 64px
-  --material-carbon radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px
+$background = #000
+$available = #222
+$target = gold
+$primary = #a3533b
+$light = #efefef
+$unit = 64px
+$material-carbon = radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px
 
 html, body
   padding 0
   margin 0
-  font-size var(--unit)
+  font-size $unit
 
 #app
   font-family Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
-  background var(--background)
+  background $background
   height 100vh
   display flex
   justify-content center
@@ -161,28 +162,38 @@ html, body
       flex-direction column
 
       .cell
-        background var(--material-carbon)
+        background $material-carbon
         background-color #282828
         background-size 16px 16px
+        position relative
         width 1rem
         height 1rem
         box-sizing border-box
-        border 1px solid var(--available)
+        border 1px solid $available
         font-size 16px // for debug purposes
         color white // for debug purposes
         transition all .5s
 
         &.blocked
           &:not(.start)
-            background var(--background)
+            background $background
             border none
           &:not(.start):not(.background)
             border-top .2rem solid #333
             border-left .2rem solid #333
             border-bottom .2rem solid #111
             border-right .2rem solid #111
-        &.target
-          background var(--target)
+        &.target::after
+          content ''
+          display block
+          position relative
+          width 70%
+          height 70%
+          top 50%
+          left 50%
+          transform translate(-50%, -50%)
+          background $target
+          animation glow 2s 0s infinite linear alternate
 
     .player
       position absolute
@@ -200,10 +211,10 @@ html, body
         width .6rem
         height .6rem
         border-radius 50%
-        background-color #a3533b
-        background-image linear-gradient(-45deg, rgba(0,0,0,.6) 0%, transparent 100%);
-        box-shadow 0 0.4rem 0.6rem .3rem var(--background)
-        animation idle 1s 0s infinite ease-in-out alternate
+        background-color $primary
+        background-image linear-gradient(-45deg, rgba($background,.6) 0%, transparent 100%);
+        box-shadow 0 0.4rem 0.6rem .3rem $background
+        animation idle 1s 0s infinite cubic-bezier(.65,.05,.36,1) alternate
         transition height 1s, width 1s, opacity .5s
       &.exit::after
         top .3rem
@@ -222,12 +233,62 @@ html, body
       &.down
         // transform rotate(180deg)
   #controls
+    display flex
+    justify-content center
+    align-items center
     margin-left 2rem
     padding .5rem
-    background var(--available)
+    background $available
 
+// buttons
+.btn
+  appearance none
+  background $available
+  border .01rem solid $primary
+  border-radius 0
+  color $primary
+  cursor pointer
+  display inline-block
+  outline none
+  padding .15rem .2rem
+  text-align center
+  text-decoration none
+  transition background .2s, border .2s, box-shadow .2s, color .2s
+  user-select none
+  vertical-align middle
+  white-space nowrap
+  text-transform uppercase
+  letter-spacing 2px
+  &:focus
+    box-shadow 0 0 0 .1rem rgba($primary, .2)
+  &:focus,
+  &:hover
+    background rgba($primary, .2)
+    border-color $primary
+    text-decoration none
+  &:active,
+  &.active
+    background $primary
+    border-color darken($primary, 5%)
+    color $light
+    text-decoration none
+    &.loading
+      &::after
+        border-bottom-color $light
+        border-left-color $light
+
+// animations
 @keyframes idle
-  from { top: .15rem; box-shadow 0 0.15rem 0.6rem -0.05rem var(--background); }
-  to   { top: 0;      box-shadow 0 0.4rem 0.6rem -0.05rem var(--background); }
+  from
+    top .15rem
+    box-shadow 0 0.15rem 0.6rem -0.05rem $background
+  to
+    top 0
+    box-shadow 0 0.4rem 0.6rem -0.05rem $background
 
+@keyframes glow
+  from
+    box-shadow 0 0 0.2rem -.1rem $target
+  to
+    box-shadow 0 0 0.5rem -.1rem $target
 </style>
