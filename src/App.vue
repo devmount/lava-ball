@@ -8,17 +8,17 @@
           :class="{
             'blocked': isBlocked(i, j),
             'background': isBackground(i, j),
-            'start': isStart(i, j) && init,
+            'start': isStart(i, j) && game.init,
             'target': isTarget(i, j),
-            'target-closed': isTarget(i, j) && isFinished,
+            'target-closed': isTarget(i, j) && finished,
           }"
         >
         <!-- {{i}},{{j}} -->
         </div>
       </div>
-      <div :class="'player ' + lastDirection + ' ' + (isFinished ? 'exit' : '')" ref="p"></div>
+      <div :class="'player ' + lastDirection + ' ' + (finished ? 'exit' : '')" ref="player"></div>
     </div>
-    <div id="controls">
+    <div id="dashboard">
       <button class="btn" @click="restart">Restart</button>
     </div>
   </div>
@@ -41,21 +41,26 @@ export default {
         start: {x:0,y:10},
         target: {x:9,y:2}
       },
-      init: true,
-      p: {x:0,y:10},
-      lastDirection: 'right'
+      game: {
+        init: true,
+      },
+      player: {
+        x:0, y:10,
+        active: true,
+        lastDirection: 'right',
+      }
     }
   },
   mounted () {
-    this.$refs.p.style.left = (this.p.x*64) + 'px'
-    this.$refs.p.style.top = (this.p.y*64) + 'px'
+    this.$refs.player.style.left = (this.player.x*64) + 'px'
+    this.$refs.player.style.top = (this.player.y*64) + 'px'
     this.$refs.game.focus()
   },
   methods: {
     isBlocked (x, y) {
       for (let i = 0; i < this.map.blocked.length; i++) {
         const block = this.map.blocked[i]
-        if (JSON.stringify(block) === JSON.stringify({x:x,y:y}) || x==0 || y==0 || x==this.map.x+1 || y==this.map.y+1) {
+        if (this.eq(block, {x:x,y:y}) || x==0 || y==0 || x==this.map.x+1 || y==this.map.y+1) {
           return true
         }
       }
@@ -64,59 +69,62 @@ export default {
     isBackground (x, y) {
       for (let i = 0; i < this.map.background.length; i++) {
         const b = this.map.background[i]
-        if (JSON.stringify(b) === JSON.stringify({x:x,y:y})) {
+        if (this.eq(b, {x:x,y:y})) {
           return true
         }
       }
       return false
     },
     isStart (x, y) {
-      return JSON.stringify(this.map.start) === JSON.stringify({x:x,y:y}) 
+      return this.eq(this.map.start, {x:x,y:y})
     },
     isTarget (x, y) {
-      return JSON.stringify(this.map.target) === JSON.stringify({x:x,y:y}) 
+      return this.eq(this.map.target, {x:x,y:y})
     },
     go (x, y) {
-      this.init = false
-      this.p.x = x
-      this.p.y = y
-      this.$refs.p.style.left = (x*64) + 'px'
-      this.$refs.p.style.top = (y*64) + 'px'
+      this.game.init = false
+      this.player.x = x
+      this.player.y = y
+      this.$refs.player.style.left = (x*64) + 'px'
+      this.$refs.player.style.top = (y*64) + 'px'
     },
     left () {
       this.lastDirection = 'left'
-      if (!this.isBlocked(this.p.x-1, this.p.y) && this.p.x > 0) {
-        this.go(this.p.x-1, this.p.y)
+      if (!this.isBlocked(this.player.x-1, this.player.y) && this.player.x > 0) {
+        this.go(this.player.x-1, this.player.y)
       }
     },
     right () {
       this.lastDirection = 'right'
-      if (!this.isBlocked(this.p.x+1, this.p.y) && this.p.x < this.map.x) {
-        this.go(this.p.x+1, this.p.y)
+      if (!this.isBlocked(this.player.x+1, this.player.y) && this.player.x < this.map.x) {
+        this.go(this.player.x+1, this.player.y)
       }
     },
     up () {
       this.lastDirection = 'up'
-      if (!this.isBlocked(this.p.x, this.p.y-1) && this.p.y > 0) {
-        this.go(this.p.x, this.p.y-1)
+      if (!this.isBlocked(this.player.x, this.player.y-1) && this.player.y > 0) {
+        this.go(this.player.x, this.player.y-1)
       }
     },
     down () {
       this.lastDirection = 'down'
-      if (!this.isBlocked(this.p.x, this.p.y+1) && this.p.y < this.map.y) {
-        this.go(this.p.x, this.p.y+1)
+      if (!this.isBlocked(this.player.x, this.player.y+1) && this.player.y < this.map.y) {
+        this.go(this.player.x, this.player.y+1)
       }
     },
     restart () {
-      this.p.x = this.map.start.x
-      this.p.y = this.map.start.y
-      this.go(this.p.x, this.p.y)
-      this.init = true
+      this.player.x = this.map.start.x
+      this.player.y = this.map.start.y
+      this.go(this.player.x, this.player.y)
+      this.game.init = true
+    },
+    eq (a,b) {
+      return (a.x == b.x && a.y == b.y)
     }
   },
   computed: {
-    isFinished () {
-      if (JSON.stringify(this.map.target) === JSON.stringify(this.p)) {
+    finished () {
+      if (this.eq(this.map.target, this.player)) {
         return true
       } else {
         return false
@@ -244,7 +252,7 @@ html, body
         // transform rotate(0deg)
       &.down
         // transform rotate(180deg)
-  #controls
+  #dashboard
     display flex
     justify-content center
     align-items center
