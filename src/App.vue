@@ -10,12 +10,13 @@
             'background': isBackground(i, j),
             'start': isStart(i, j) && init,
             'target': isTarget(i, j),
+            'target-closed': isTarget(i, j) && isFinished,
           }"
         >
         <!-- {{i}},{{j}} -->
         </div>
       </div>
-      <div :class="'player ' + lastDirection + ' ' + isFinished" ref="p"></div>
+      <div :class="'player ' + lastDirection + ' ' + (isFinished ? 'exit' : '')" ref="p"></div>
     </div>
     <div id="controls">
       <button class="btn" @click="restart">Restart</button>
@@ -116,9 +117,9 @@ export default {
   computed: {
     isFinished () {
       if (JSON.stringify(this.map.target) === JSON.stringify(this.p)) {
-        return 'exit'
+        return true
       } else {
-        return ''
+        return false
       }
     },
   }
@@ -183,17 +184,28 @@ html, body
             border-left .2rem solid #333
             border-bottom .2rem solid #111
             border-right .2rem solid #111
-        &.target::after
+        &.target
+          background $available
+        &.target::before, &.target::after
           content ''
           display block
-          position relative
+          position absolute
           width 70%
           height 70%
           top 50%
           left 50%
           transform translate(-50%, -50%)
+        &.target::after
           background $target
+          transition width 1s .3s, height 1s .3s
           animation glow 2s 0s infinite linear alternate
+        &.target-closed::before
+          transition opacity 1s .5s
+          background $background
+          opacity 0
+        &.target-closed::after
+          width 0
+          height 0
 
     .player
       position absolute
@@ -259,7 +271,7 @@ html, body
   white-space nowrap
   text-transform uppercase
   letter-spacing 2px
-  &:focus
+  &:hover
     box-shadow 0 0 0 .1rem rgba($primary, .2)
   &:focus,
   &:hover
@@ -272,10 +284,6 @@ html, body
     border-color darken($primary, 5%)
     color $light
     text-decoration none
-    &.loading
-      &::after
-        border-bottom-color $light
-        border-left-color $light
 
 // animations
 @keyframes idle
