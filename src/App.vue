@@ -39,11 +39,11 @@
     <!-- modal -->
     <div class="modal" :class="{ 'active': game.finished }">
       <div class="modal-content text-center">
-        <div class="header">
-          <h2>Level 1 finished!</h2>
-        </div>
+        <div class="header">Level 1 completed!</div>
         <div class="body">
-          <p>Congratulations! You finished level 1 with {{ player.steps }} steps.</p>
+          <p>Congratulations! You finished level 1 in {{ player.steps }} steps.</p>
+        </div>
+        <div class="footer">
           <button class="btn" @click="restart">Restart</button>
         </div>
       </div>
@@ -188,6 +188,7 @@ export default {
 </script>
 
 <style lang="stylus">
+// style configuration
 $background = #000
 $available = #222
 $target = gold
@@ -195,6 +196,11 @@ $primary = #a3533b
 $light = #efefef
 $unit = 16px // cell size is per default 4x $unit
 $material-carbon = radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px
+$font-heading = 'Bungee', cursive
+$font-text = 'Open Sans', sans-serif
+
+// fonts
+@import url('https://fonts.googleapis.com/css?family=Bungee|Open+Sans&display=swap')
 
 html, body
   padding 0
@@ -203,7 +209,7 @@ html, body
 
 // layout
 #app
-  font-family Avenir, Helvetica, Arial, sans-serif
+  font-family $font-text
   -webkit-font-smoothing antialiased
   -moz-osx-font-smoothing grayscale
   background $background
@@ -360,6 +366,7 @@ html, body
 .number
   background $available
   color $primary
+  font-family $font-heading
 
   label
     display inline-block
@@ -387,6 +394,13 @@ html, body
     opacity 1
     visibility visible
     animation finished 1s both
+
+  .header
+    font-size 2.5rem
+    font-family $font-heading
+
+  .footer
+    margin-top 2rem
 
 // animations
 @keyframes idle
