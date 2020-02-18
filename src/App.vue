@@ -30,11 +30,19 @@
     </div>
     <!-- dashboard -->
     <div id="dashboard">
-      <div class="number text-center">
-        <span class="size-2x">{{ player.steps }}</span>
-        <label>steps</label>
+      <div class="title">
+        <h1><span class="first">Asllperg's</span><span class="second">Quest</span></h1>
       </div>
-      <button class="btn" @click="restart">Restart</button>
+      <div class="subtitle">
+        <h2>Level 1</h2>
+      </div>
+      <div class="controls text-center">
+        <div class="number">
+          <span class="size-2x">{{ player.steps }}</span>
+          <label>steps</label>
+        </div>
+        <button class="btn" @click="restart">Restart</button>
+      </div>
     </div>
     <!-- modal -->
     <div class="modal" :class="{ 'active': game.finished }">
@@ -121,14 +129,14 @@ export default {
     },
     // move player to given position, if game isn't already finished
     go (x, y) {
-      // if (!this.finished) {
+      if (!this.finished) {
         this.game.init = false
         this.player.x = x
         this.player.y = y
         this.player.steps++
         this.$refs.player.style.left = 4*x + 'rem'
         this.$refs.player.style.top = 4*y + 'rem'
-      // }
+      }
     },
     // move player one cell left
     left () {
@@ -314,14 +322,49 @@ html, body
   #dashboard
     display flex
     justify-content center
-    align-items center
+    align-items stretch
     flex-direction column
     margin-left 8rem
-    padding 2rem
-    background $available
 
-    & > *:not(:last-child)
-      margin-bottom .5rem
+    .title, .subtitle
+      font-family $font-heading
+      color $primary
+      text-align center
+
+      h1
+        position relative
+
+        .first
+          display block
+          font-size 1.7rem
+          line-height 3rem
+        .second
+          display block
+          font-size 3.3rem
+          line-height 2rem
+        
+        &::after {
+          content ''
+          position absolute
+          left 50%
+          bottom -2.5rem
+          transform translate(-50%)
+          display block
+          height .1rem
+          width 3rem
+          background $primary
+        }
+
+      h2
+        font-size 2.5rem
+        line-height 5rem
+
+    .controls
+      padding 2rem
+      background $available
+
+      & > *:not(:last-child)
+        margin-bottom .5rem
 
 // text
 .size-2x
