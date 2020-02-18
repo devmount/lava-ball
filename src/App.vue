@@ -13,7 +13,7 @@
             'target-closed': isTarget(i, j) && finished,
           }"
         >
-        <!-- {{i}},{{j}} -->
+        <!-- {{i}},{{j}} --><!--for debugging or map creation -->
         </div>
       </div>
       <div :class="'player ' + lastDirection + ' ' + (finished ? 'exit' : '')" ref="player"></div>
@@ -52,8 +52,10 @@ export default {
     }
   },
   mounted () {
-    this.$refs.player.style.left = (this.player.x*64) + 'px'
-    this.$refs.player.style.top = (this.player.y*64) + 'px'
+    // initial position of player, one cell is 4x basic unit
+    this.$refs.player.style.left = 4*this.player.x + 'rem'
+    this.$refs.player.style.top = 4*this.player.y + 'rem'
+    // set focus to game to handle key events
     this.$refs.game.focus()
   },
   methods: {
@@ -85,8 +87,8 @@ export default {
       this.game.init = false
       this.player.x = x
       this.player.y = y
-      this.$refs.player.style.left = (x*64) + 'px'
-      this.$refs.player.style.top = (y*64) + 'px'
+      this.$refs.player.style.left = 4*x + 'rem'
+      this.$refs.player.style.top = 4*y + 'rem'
     },
     left () {
       this.lastDirection = 'left'
@@ -140,7 +142,7 @@ $available = #222
 $target = gold
 $primary = #a3533b
 $light = #efefef
-$unit = 64px
+$unit = 16px // cell size is per default 4x $unit
 $material-carbon = radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px
 
 html, body
@@ -173,13 +175,12 @@ html, body
       .cell
         background $material-carbon
         background-color #282828
-        background-size 16px 16px
+        background-size 1rem 1rem
         position relative
-        width 1rem
-        height 1rem
+        width 4rem
+        height 4rem
         box-sizing border-box
         border 1px solid $available
-        font-size 16px // for debug purposes
         color white // for debug purposes
         transition all .5s
 
@@ -188,10 +189,10 @@ html, body
             background $background
             border none
           &:not(.start):not(.background)
-            border-top .2rem solid #333
-            border-left .2rem solid #333
-            border-bottom .2rem solid #111
-            border-right .2rem solid #111
+            border-top .8rem solid #333
+            border-left .8rem solid #333
+            border-bottom .8rem solid #111
+            border-right .8rem solid #111
         &.target
           background $available
         &.target::before, &.target::after
@@ -217,27 +218,27 @@ html, body
 
     .player
       position absolute
-      width 1rem
-      height 1rem
+      width 4rem
+      height 4rem
       transition left .2s, top .2s, transform .1s
 
       &::after
         content ''
         display inline-block
         position absolute
-        top .15rem
+        top 2.4rem
         left 50%
         transform translate(-50%)
-        width .6rem
-        height .6rem
+        width 2.4rem
+        height 2.4rem
         border-radius 50%
         background-color $primary
         background-image linear-gradient(-45deg, rgba($background,.6) 0%, transparent 100%);
-        box-shadow 0 0.4rem 0.6rem .3rem $background
+        box-shadow 0 1.6rem 2.4rem 1.2rem $background
         animation idle 1s 0s infinite cubic-bezier(.65,.05,.36,1) alternate
         transition height 1s, width 1s, opacity .5s
       &.exit::after
-        top .3rem
+        top 1.2rem
         animation none
         box-shadow none
         width 0
@@ -256,21 +257,21 @@ html, body
     display flex
     justify-content center
     align-items center
-    margin-left 2rem
-    padding .5rem
+    margin-left 8rem
+    padding 2rem
     background $available
 
 // buttons
 .btn
   appearance none
   background $available
-  border .01rem solid $primary
+  border .04rem solid $primary
   border-radius 0
   color $primary
   cursor pointer
   display inline-block
   outline none
-  padding .15rem .2rem
+  padding .6rem .8rem
   text-align center
   text-decoration none
   transition background .2s, border .2s, box-shadow .2s, color .2s
@@ -278,9 +279,9 @@ html, body
   vertical-align middle
   white-space nowrap
   text-transform uppercase
-  letter-spacing 2px
+  letter-spacing .2rem
   &:hover
-    box-shadow 0 0 0 .1rem rgba($primary, .2)
+    box-shadow 0 0 0 .4rem rgba($primary, .2)
   &:focus,
   &:hover
     background rgba($primary, .2)
@@ -296,15 +297,15 @@ html, body
 // animations
 @keyframes idle
   from
-    top .15rem
-    box-shadow 0 0.15rem 0.6rem -0.05rem $background
+    top .6rem
+    box-shadow 0 .6rem 2.4rem -.2rem $background
   to
     top 0
-    box-shadow 0 0.4rem 0.6rem -0.05rem $background
+    box-shadow 0 1.6rem 2.4rem -.2rem $background
 
 @keyframes glow
   from
-    box-shadow 0 0 0.2rem -.1rem $target
+    box-shadow 0 0 .8rem -.4rem $target
   to
-    box-shadow 0 0 0.5rem -.1rem $target
+    box-shadow 0 0 2rem -.4rem $target
 </style>
