@@ -1,5 +1,14 @@
 <template>
-  <div id="app" ref="game" tabindex="0" @keydown.left="left" @keydown.right="right" @keydown.up="up" @keydown.down="down">
+  <div
+    id="app"
+    ref="game"
+    tabindex="0"
+    @keydown.left="left"
+    @keydown.right="right"
+    @keydown.up="up"
+    @keydown.down="down"
+    @keydown.escape="restart"
+  >
     <!-- map section -->
     <div id="map">
       <div v-for="(y, i) in map.y+2" class="column">
@@ -21,6 +30,10 @@
     </div>
     <!-- dashboard -->
     <div id="dashboard">
+      <div class="number">
+        <span class="size-2x">{{ player.steps }}</span>
+        <label>steps</label>
+      </div>
       <button class="btn" @click="restart">Restart</button>
     </div>
   </div>
@@ -52,6 +65,7 @@ export default {
       player: {
         x:0, y:10,
         active: true,
+        steps: 0,
         lastDirection: 'right',
       }
     }
@@ -97,6 +111,7 @@ export default {
       this.game.init = false
       this.player.x = x
       this.player.y = y
+      this.player.steps++
       this.$refs.player.style.left = 4*x + 'rem'
       this.$refs.player.style.top = 4*y + 'rem'
     },
@@ -132,6 +147,7 @@ export default {
     restart () {
       this.player.x = this.map.start.x
       this.player.y = this.map.start.y
+      this.player.steps = -1
       this.go(this.player.x, this.player.y)
       this.game.init = true
     },
@@ -167,6 +183,7 @@ html, body
   margin 0
   font-size $unit
 
+// layout
 #app
   font-family Avenir, Helvetica, Arial, sans-serif
   -webkit-font-smoothing antialiased
@@ -274,9 +291,18 @@ html, body
     display flex
     justify-content center
     align-items center
+    flex-direction column
     margin-left 8rem
     padding 2rem
     background $available
+
+    & > *:not(:last-child)
+      margin-bottom .5rem
+
+// text
+.size-2x {
+  font-size 2rem
+}
 
 // buttons
 .btn
@@ -310,6 +336,16 @@ html, body
     border-color darken($primary, 5%)
     color $light
     text-decoration none
+
+// featured numbers
+.number
+  background $available
+  text-align center
+  color $primary
+
+  label
+    display inline-block
+    margin-left .5rem
 
 // animations
 @keyframes idle
