@@ -30,11 +30,23 @@
     </div>
     <!-- dashboard -->
     <div id="dashboard">
-      <div class="number">
+      <div class="number text-center">
         <span class="size-2x">{{ player.steps }}</span>
         <label>steps</label>
       </div>
       <button class="btn" @click="restart">Restart</button>
+    </div>
+    <!-- modal -->
+    <div class="modal" :class="{ 'active': game.finished }">
+      <div class="modal-content text-center">
+        <div class="header">
+          <h2>Level 1 finished!</h2>
+        </div>
+        <div class="body">
+          <p>Congratulations! You finished level 1 with {{ player.steps }} steps.</p>
+          <button class="btn" @click="restart">Restart</button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -60,6 +72,7 @@ export default {
       // game configuration
       game: {
         init: true,
+        finished: false,
       },
       // player configuration
       player: {
@@ -106,14 +119,16 @@ export default {
     isTarget (x, y) {
       return this.eq(this.map.target, {x:x,y:y})
     },
-    // move player to given position
+    // move player to given position, if game isn't already finished
     go (x, y) {
-      this.game.init = false
-      this.player.x = x
-      this.player.y = y
-      this.player.steps++
-      this.$refs.player.style.left = 4*x + 'rem'
-      this.$refs.player.style.top = 4*y + 'rem'
+      // if (!this.finished) {
+        this.game.init = false
+        this.player.x = x
+        this.player.y = y
+        this.player.steps++
+        this.$refs.player.style.left = 4*x + 'rem'
+        this.$refs.player.style.top = 4*y + 'rem'
+      // }
     },
     // move player one cell left
     left () {
@@ -150,6 +165,7 @@ export default {
       this.player.steps = -1
       this.go(this.player.x, this.player.y)
       this.game.init = true
+      this.game.finished = false
     },
     // check if two given positions are equal
     eq (a,b) {
@@ -160,6 +176,8 @@ export default {
     // calculate if game is finished (player reached goal)
     finished () {
       if (this.eq(this.map.target, this.player)) {
+        let self = this
+        setTimeout(function(){ self.game.finished = true}, 1500)
         return true
       } else {
         return false
@@ -300,9 +318,11 @@ html, body
       margin-bottom .5rem
 
 // text
-.size-2x {
+.size-2x
   font-size 2rem
-}
+
+.text-center
+  text-align center
 
 // buttons
 .btn
@@ -315,7 +335,6 @@ html, body
   display inline-block
   outline none
   padding .6rem .8rem
-  text-align center
   text-decoration none
   transition background .2s, border .2s, box-shadow .2s, color .2s
   user-select none
@@ -340,12 +359,34 @@ html, body
 // featured numbers
 .number
   background $available
-  text-align center
   color $primary
 
   label
     display inline-block
     margin-left .5rem
+
+// modal
+.modal
+  background $available
+  color $light
+  position absolute
+  top 50%
+  left 50%
+  transform translate(-50%, -50%)
+  width 50%
+  height auto
+  padding 2rem
+  opacity 0
+  visibility hidden
+  box-shadow 0 0 100vw 100vw rgba(0,0,0,.5)
+  box-sizing border-box
+  transition all .4s ease-in-out
+
+  &.active
+    width 60%
+    opacity 1
+    visibility visible
+    animation finished 1s both
 
 // animations
 @keyframes idle
@@ -361,4 +402,16 @@ html, body
     box-shadow 0 0 .8rem -.4rem $target
   to
     box-shadow 0 0 2rem -.4rem $target
+
+@keyframes finished
+  0%
+    transform translate(-50%, -50%) scaleX(1);
+  10%, 20%
+    transform translate(-50%, -50%) scale3d(.9,.9,.9) rotate(-3deg);
+  30%, 60%, 90%
+    transform translate(-50%, -50%) scale3d(1.1,1.1,1.1) rotate(3deg);
+  45%, 75%
+    transform translate(-50%, -50%) scale3d(1.1,1.1,1.1) rotate(-3deg);
+  100%
+    transform translate(-50%, -50%) scaleX(1);
 </style>
