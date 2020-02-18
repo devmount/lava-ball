@@ -1,5 +1,6 @@
 <template>
   <div id="app" ref="game" tabindex="0" @keydown.left="left" @keydown.right="right" @keydown.up="up" @keydown.down="down">
+    <!-- map section -->
     <div id="map">
       <div v-for="(y, i) in map.y+2" class="column">
         <div
@@ -18,6 +19,7 @@
       </div>
       <div :class="'player ' + lastDirection + ' ' + (finished ? 'exit' : '')" ref="player"></div>
     </div>
+    <!-- dashboard -->
     <div id="dashboard">
       <button class="btn" @click="restart">Restart</button>
     </div>
@@ -34,6 +36,7 @@ export default {
   },
   data () {
     return {
+      // fixed map configuration per level
       map: {
         x: 10, y: 10,
         blocked: [{x:1,y:1}, {x:1,y:2}, {x:2,y:1}, {x:4,y:4}, {x:5,y:4}, {x:4,y:5}, {x:6,y:4}, {x:4,y:6}, {x:5,y:5}, {x:6,y:5}, {x:5,y:6}, {x:6,y:6}, {x:8,y:2}, {x:8,y:3}, {x:9,y:3}, {x:10,y:10}],
@@ -41,9 +44,11 @@ export default {
         start: {x:0,y:10},
         target: {x:9,y:2}
       },
+      // game configuration
       game: {
         init: true,
       },
+      // player configuration
       player: {
         x:0, y:10,
         active: true,
@@ -59,6 +64,7 @@ export default {
     this.$refs.game.focus()
   },
   methods: {
+    // check if given cell is blocked (not accessible by player)
     isBlocked (x, y) {
       for (let i = 0; i < this.map.blocked.length; i++) {
         const block = this.map.blocked[i]
@@ -68,6 +74,7 @@ export default {
       }
       return false
     },
+    // check if cell is background cell (not functional and not accessible due to completely surrounded by blocked cells)
     isBackground (x, y) {
       for (let i = 0; i < this.map.background.length; i++) {
         const b = this.map.background[i]
@@ -77,12 +84,15 @@ export default {
       }
       return false
     },
+    // check if cell is level start
     isStart (x, y) {
       return this.eq(this.map.start, {x:x,y:y})
     },
+    // check if cell is level goal
     isTarget (x, y) {
       return this.eq(this.map.target, {x:x,y:y})
     },
+    // move player to given position
     go (x, y) {
       this.game.init = false
       this.player.x = x
@@ -90,41 +100,48 @@ export default {
       this.$refs.player.style.left = 4*x + 'rem'
       this.$refs.player.style.top = 4*y + 'rem'
     },
+    // move player one cell left
     left () {
       this.lastDirection = 'left'
       if (!this.isBlocked(this.player.x-1, this.player.y) && this.player.x > 0) {
         this.go(this.player.x-1, this.player.y)
       }
     },
+    // move player one cell right
     right () {
       this.lastDirection = 'right'
       if (!this.isBlocked(this.player.x+1, this.player.y) && this.player.x < this.map.x) {
         this.go(this.player.x+1, this.player.y)
       }
     },
+    // move player one cell up
     up () {
       this.lastDirection = 'up'
       if (!this.isBlocked(this.player.x, this.player.y-1) && this.player.y > 0) {
         this.go(this.player.x, this.player.y-1)
       }
     },
+    // move player one cell down
     down () {
       this.lastDirection = 'down'
       if (!this.isBlocked(this.player.x, this.player.y+1) && this.player.y < this.map.y) {
         this.go(this.player.x, this.player.y+1)
       }
     },
+    // restart level by setting player position to start and initialize level
     restart () {
       this.player.x = this.map.start.x
       this.player.y = this.map.start.y
       this.go(this.player.x, this.player.y)
       this.game.init = true
     },
+    // check if two given positions are equal
     eq (a,b) {
       return (a.x == b.x && a.y == b.y)
     }
   },
   computed: {
+    // calculate if game is finished (player reached goal)
     finished () {
       if (this.eq(this.map.target, this.player)) {
         return true
