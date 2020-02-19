@@ -42,7 +42,8 @@
           <span class="size-2x">{{ player.steps }}</span>
           <label>steps</label>
         </div>
-        <button class="btn" @click="restart">Restart</button>
+        <button class="btn btn-block" @click="restart">Restart Level</button>
+        <button class="btn btn-block" @click="reset">Reset Game</button>
       </div>
     </div>
     <!-- modal -->
@@ -181,6 +182,12 @@ export default {
       this.game.finished = false
     },
     // go to next level
+    reset () {
+      this.game.level = 1
+      this.game.score = 0
+      this.restart()
+    },
+    // go to next level
     next () {
       if (!this.isLastLevel) {
         this.game.level++
@@ -196,6 +203,7 @@ export default {
     // calculate if game is finished (player reached goal)
     finished () {
       if (this.eq(this.map[this.game.level].target, this.player)) {
+        this.game.score += this.player.steps
         let self = this
         setTimeout(function(){ self.game.finished = true}, 1500)
         return true
@@ -420,6 +428,9 @@ html, body
     border-color darken($primary, 5%)
     color $light
     text-decoration none
+  &.btn-block
+    display block
+    width 100%
 
 // featured numbers
 .number
