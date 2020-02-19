@@ -54,8 +54,8 @@
           <p>Congratulations! You finished level {{ game.level }} in {{ player.steps }} steps.</p>
         </div>
         <div class="footer">
-          <button class="btn" @click="restart">Restart</button>
-          <button v-if="!isLastLevel" class="btn" @click="next">Next Level</button>
+          <button class="btn mr-1" @click="restart">Restart</button>
+          <button v-if="!isLastLevel" class="btn btn-primary" @click="next">Next Level</button>
         </div>
       </div>
     </div>
@@ -393,9 +393,12 @@ html, body
 // text
 .size-2x
   font-size 2rem
-
 .text-center
   text-align center
+
+// positioning
+.mr-1
+  margin-right 1rem
 
 // buttons
 .btn
@@ -428,9 +431,25 @@ html, body
     border-color darken($primary, 5%)
     color $light
     text-decoration none
+
   &.btn-block
     display block
     width 100%
+
+  &.btn-primary
+    background $primary
+    border-color darken($primary, 5%)
+    color $light
+    text-decoration none
+
+    &:focus,
+    &:hover
+      background rgba($primary, .8)
+    &:active,
+    &.active
+      background $light
+      border-color darken($primary, 5%)
+      color $primary
 
 // featured numbers
 .number
