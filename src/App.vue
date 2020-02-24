@@ -34,15 +34,24 @@
       <div class="title">
         <h1><span class="first">Asllperg's</span><span class="second">Quest</span></h1>
       </div>
-      <div class="subtitle">
-        <h2>Level {{ game.level }}</h2>
-      </div>
       <div class="controls text-center">
+        <div class="subtitle">
+          <h2>Level {{ game.level }}</h2>
+        </div>
         <div class="number">
           <span class="size-2x">{{ player.steps }}</span>
           <label>steps</label>
         </div>
-        <button class="btn btn-block" @click="restart">Restart Level</button>
+        <button class="btn btn-block" @click="restart(false)">Restart Level</button>
+      </div>
+      <div class="controls text-center">
+        <div class="subtitle">
+          <h2>Total</h2>
+        </div>
+        <div class="number">
+          <span class="size-2x">{{ game.score }}</span>
+          <label>points</label>
+        </div>
         <button class="btn btn-block" @click="reset">Reset Game</button>
       </div>
     </div>
@@ -54,7 +63,7 @@
           <p>Congratulations! You finished level {{ game.level }} in {{ player.steps }} steps.</p>
         </div>
         <div class="footer">
-          <button class="btn mr-1" @click="restart">Restart</button>
+          <button class="btn mr-1" @click="restart(false)">Restart</button>
           <button v-if="!isLastLevel" class="btn btn-primary" @click="next">Next Level</button>
         </div>
       </div>
@@ -173,16 +182,19 @@ export default {
       }
     },
     // restart level by setting player position to start and initialize level
-    restart () {
+    restart (keepScore=true) {
       this.player.x = this.map[this.game.level].start.x
       this.player.y = this.map[this.game.level].start.y
+      if (!keepScore) {
+        this.game.score -= this.player.steps
+      }
       this.player.steps = -1
       this.go(this.player.x, this.player.y)
       this.game.init = true
       this.game.finished = false
       this.$refs.game.focus()
     },
-    // go to next level
+    // reset game and start on level 1
     reset () {
       this.game.level = 1
       this.game.score = 0
@@ -355,6 +367,7 @@ html, body
       font-family $font-heading
       color $primary
       text-align center
+      margin-bottom 3rem
 
       h1
         position relative
@@ -382,10 +395,12 @@ html, body
 
       h2
         font-size 2.5rem
-        line-height 5rem
+        line-height 2.5rem
+        margin 0
 
     .controls
       padding 2rem
+      margin-bottom 2rem
       background $available
 
       & > *:not(:last-child)
