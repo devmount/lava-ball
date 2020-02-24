@@ -23,7 +23,7 @@
             'target-closed': isTarget(i, j) && finished,
           }"
         >
-        <!-- for debugging or map creation -->
+        <!-- for debugging or level creation -->
         <!-- {{i}},{{j}} -->
         </div>
       </div>
@@ -180,6 +180,7 @@ export default {
       this.go(this.player.x, this.player.y)
       this.game.init = true
       this.game.finished = false
+      this.$refs.game.focus()
     },
     // go to next level
     reset () {
