@@ -8,6 +8,7 @@
     @keydown.up="up"
     @keydown.down="down"
     @keydown.escape="restart"
+    @keydown.enter="next"
   >
     <!-- map section -->
     <div id="map">
@@ -52,19 +53,21 @@
           <span class="size-2x">{{ game.score }}</span>
           <label>points</label>
         </div>
-        <button class="btn btn-block" @click="reset">Reset Game</button>
+        <button class="btn btn-block" @click="reset">New Game</button>
       </div>
     </div>
     <!-- modal -->
     <div class="modal" :class="{ 'active': game.finished }">
       <div class="modal-content text-center">
-        <div class="header">Level {{ game.level }} completed!</div>
+        <div class="header" v-if="!isLastLevel">Level {{ game.level }} completed!</div>
+        <div class="header" v-else>Game finished!</div>
         <div class="body">
-          <p>Congratulations! You finished level {{ game.level }} in {{ player.steps }} steps.</p>
+          <p>Congratulations! You finished the game with {{ game.score }} points.</p>
         </div>
         <div class="footer">
-          <button class="btn mr-1" @click="restart(false)">Restart</button>
-          <button v-if="!isLastLevel" class="btn btn-primary" @click="next">Next Level</button>
+          <button class="btn mr-1" @click="restart(false)">Restart Level</button>
+          <button class="btn btn-primary" v-if="!isLastLevel" @click="next">Next Level</button>
+          <button class="btn btn-primary" v-else @click="reset">New Game</button>
         </div>
       </div>
     </div>
