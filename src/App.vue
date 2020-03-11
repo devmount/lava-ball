@@ -25,7 +25,7 @@
           }"
         >
         <!-- for debugging or level creation -->
-        <!-- {{i}},{{j}} -->
+        {{i}},{{j}}
         </div>
       </div>
       <div :class="'player ' + player.lastDirection + ' ' + (finished ? 'exit' : '')" ref="player"></div>
