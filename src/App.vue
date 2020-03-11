@@ -19,16 +19,27 @@
           :class="{
             'blocked': isBlocked(i, j),
             'background': isBackground(i, j),
+            'trap': isTrap(i, j),
             'start': isStart(i, j) && game.init,
             'target': isTarget(i, j),
             'target-closed': isTarget(i, j) && finished,
           }"
         >
-        <!-- for debugging or level creation -->
-        {{i}},{{j}}
+        <span v-if="debug">{{i}},{{j}}</span>
         </div>
       </div>
-      <div :class="'player ' + player.lastDirection + ' ' + (finished ? 'exit' : '')" ref="player"></div>
+      <div
+        :class="{ 
+          player: true,
+          right: player.lastDirection == 'right',
+          left: player.lastDirection == 'left',
+          up: player.lastDirection == 'up',
+          down: player.lastDirection == 'down',
+          exit: finished,
+          trapped: trapped,
+        }"
+        ref="player"
+      ></div>
     </div>
     <!-- dashboard -->
     <div id="dashboard">
@@ -44,6 +55,7 @@
           <label>steps</label>
         </div>
         <button class="btn btn-block" @click="restart(false)">Restart Level</button>
+        <button class="btn btn-block" v-if="debug" @click="next">Next Level</button>
       </div>
       <div class="controls text-center">
         <div class="subtitle">
@@ -101,7 +113,9 @@ export default {
         active: true,
         steps: 0,
         lastDirection: 'right',
-      }
+      },
+      // for development
+      debug: true
     }
   },
   mounted () {
@@ -137,6 +151,16 @@ export default {
       }
       return false
     },
+    // check if given cell is a trap (player dies)
+    isTrap (x, y) {
+      for (let i = 0; i < this.map[this.game.level].trap.length; i++) {
+        const trap = this.map[this.game.level].trap[i]
+        if (this.eq(trap, {x:x,y:y})) {
+          return true
+        }
+      }
+      return false
+    },
     // check if cell is level start
     isStart (x, y) {
       return this.eq(this.map[this.game.level].start, {x:x,y:y})
@@ -147,13 +171,19 @@ export default {
     },
     // move player to given position, if game isn't already finished
     go (x, y) {
-      if (!this.finished) {
+      // only move player if game is not finished
+      if (!this.finished && !this.trapped) {
         this.game.init = false
         this.player.x = x
         this.player.y = y
         this.player.steps++
         this.$refs.player.style.left = 4*x + 'rem'
         this.$refs.player.style.top = 4*y + 'rem'
+        // player dies if trapped, level restart by keeping score
+        if (this.trapped) {
+          let self = this
+          setTimeout(function(){ self.restart() }, 1000)
+        }
       }
     },
     // move player one cell left
@@ -227,6 +257,16 @@ export default {
         return false
       }
     },
+    // calculate if player is trapped (player dies, level restarts)
+    trapped () {
+      let trapped = false
+      this.map[this.game.level].trap.forEach(t => {
+        if (this.eq(t, this.player)) {
+          trapped = true
+        }
+      })
+      return trapped
+    },
     // calculate if current level is the last one
     isLastLevel () {
       return this.game.level == Object.keys(this.map).length
@@ -299,6 +339,8 @@ html, body
             border-left .8rem solid #333
             border-bottom .8rem solid #111
             border-right .8rem solid #111
+        &.trap
+          background red
         &.target
           background $available
         &.target::before, &.target::after
@@ -343,7 +385,8 @@ html, body
         box-shadow 0 1.6rem 2.4rem 1.2rem $background
         animation idle 1s 0s infinite cubic-bezier(.65,.05,.36,1) alternate
         transition height 1s, width 1s, opacity .5s
-      &.exit::after
+      &.exit::after,
+      &.trapped::after
         top 1.2rem
         animation none
         box-shadow none
