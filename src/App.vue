@@ -283,7 +283,8 @@ $target = gold
 $primary = #a3533b
 $light = #efefef
 $unit = 16px // cell size is per default 4x $unit
-$material-carbon = radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) 8px 8px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 8px 9px
+$material-carbon = radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) $unit/2 $unit/2, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 $unit/16, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) $unit/2 9px
+$material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.8) $unit/2, transparent 0px, transparent $unit ), repeating-linear-gradient(-45deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5) $unit/2, transparent 0px, transparent $unit), #d50000
 $font-heading = 'Bungee', cursive
 $font-text = 'Open Sans', sans-serif
 
@@ -340,7 +341,7 @@ html, body
             border-bottom .8rem solid #111
             border-right .8rem solid #111
         &.trap
-          background red
+          background $material-lava
         &.target
           background $available
         &.target::before, &.target::after
