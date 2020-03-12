@@ -54,7 +54,7 @@
           <span class="size-2x">{{ player.steps }}</span>
           <label>steps</label>
         </div>
-        <button class="btn btn-block" @click="restart(false)">Restart Level</button>
+        <button class="btn btn-block" @click="restart()">Restart Level</button>
         <button class="btn btn-block" v-if="debug" @click="next">Next Level</button>
       </div>
       <div class="controls text-center">
@@ -183,7 +183,7 @@ export default {
         // player dies if trapped, level restart by keeping score
         if (this.trapped) {
           let self = this
-          setTimeout(function(){ self.restart() }, 1000)
+          setTimeout(function(){ self.restart(true, true) }, 1000)
         }
       }
     },
@@ -216,13 +216,15 @@ export default {
       }
     },
     // restart level by setting player position to start and initialize level
-    restart (keepScore=true) {
+    restart (keepGameScore=true, keepLevelScore=false) {
       this.player.x = this.map[this.game.level].start.x
       this.player.y = this.map[this.game.level].start.y
-      if (!keepScore) {
+      if (!keepGameScore) {
         this.game.score -= this.player.steps
       }
-      this.player.steps = -1
+      if (!keepLevelScore) {
+        this.player.steps = -1
+      }
       this.go(this.player.x, this.player.y)
       this.game.init = true
       this.game.finished = false
