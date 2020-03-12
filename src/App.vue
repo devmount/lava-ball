@@ -74,7 +74,8 @@
         <div class="header" v-if="!isLastLevel">Level {{ game.level }} completed!</div>
         <div class="header" v-else>Game finished!</div>
         <div class="body">
-          <p>Congratulations! You finished the game with {{ game.score }} points.</p>
+          <p v-if="!isLastLevel">You currently have {{ game.score }} points.</p>
+          <p v-else>Congratulations! You finished the game with {{ game.score }} points.</p>
         </div>
         <div class="footer">
           <button class="btn mr-1" @click="restart(false)">Restart Level</button>
