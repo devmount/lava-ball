@@ -282,9 +282,13 @@ $available = #222
 $target = gold
 $primary = #a3533b
 $light = #efefef
+$fire = #d50000
 $unit = 16px // cell size is per default 4x $unit
-$material-carbon = radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) $unit/2 $unit/2, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 $unit/16, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) $unit/2 9px
-$material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.8) $unit/2, transparent 0px, transparent $unit ), repeating-linear-gradient(-45deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5) $unit/2, transparent 0px, transparent $unit), #d50000
+$unit2 = $unit/2
+$unit4 = $unit/4
+$unit16 = $unit/16
+$material-carbon = radial-gradient(black 15%, transparent 16%) 0 0, radial-gradient(black 15%, transparent 16%) $unit2 $unit2, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 $unit16, radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) $unit2 9px
+$material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.8) $unit2, transparent 0px, transparent $unit ), repeating-linear-gradient(-45deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5) $unit2, transparent 0px, transparent $unit), $fire
 $font-heading = 'Bungee', cursive
 $font-text = 'Open Sans', sans-serif
 
@@ -342,6 +346,7 @@ html, body
             border-right .8rem solid #111
         &.trap
           background $material-lava
+          border $unit4 solid rgba($background, .8)
         &.target
           background $available
         &.target::before, &.target::after
