@@ -44,7 +44,11 @@
     <!-- dashboard -->
     <div id="dashboard">
       <div class="title">
-        <h1><span class="first">Asllperg's</span><span class="second">Quest</span></h1>
+        <h1>
+          <span class="first">Asllperg's</span>
+          <span class="second">Quest</span>
+          <span class="version">v{{ $version }}</span>
+        </h1>
       </div>
       <div class="controls text-center">
         <div class="subtitle">
@@ -426,28 +430,20 @@ html, body
 
       h1
         position relative
+        display flex
+        flex-direction column
 
         .first
-          display block
           font-size 1.7rem
-          line-height 3rem
+          line-height 1.7rem
         .second
-          display block
           font-size 3.3rem
-          line-height 2rem
-        
-        &::after {
-          content ''
-          position absolute
-          left 50%
-          bottom -2.5rem
-          transform translate(-50%)
-          display block
-          height .1rem
-          width 3rem
-          background $primary
-        }
-
+          line-height 2.5rem
+        .version
+          font-size 1rem
+          font-family $font-text
+          line-height 1.5rem
+       
       h2
         font-size 2.5rem
         line-height 2.5rem
