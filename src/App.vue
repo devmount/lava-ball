@@ -88,6 +88,14 @@
         </div>
       </div>
     </div>
+    <!-- footer -->
+    <footer>
+      <div class="cursor-pointer fixed-bottom-right" @click="debug = !debug">
+        Debug Mode
+        <span v-show="debug">On</span>
+        <span v-show="!debug">Off</span>
+      </div>
+    </footer>
   </div>
 </template>
 
@@ -120,7 +128,7 @@ export default {
         lastDirection: 'right',
       },
       // for development
-      debug: true
+      debug: false
     }
   },
   mounted () {
@@ -463,9 +471,17 @@ html, body
 .text-center
   text-align center
 
+// cursor
+.cursor-pointer
+  cursor pointer
+
 // positioning
 .mr-1
   margin-right 1rem
+.fixed-bottom-right
+  position fixed
+  bottom .5rem
+  right .5rem
 
 // buttons
 .btn
