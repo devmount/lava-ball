@@ -100,15 +100,12 @@
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import { defineComponent } from 'vue';
 
 import level from './level'
 
-export default {
+export default defineComponent({
   name: 'App',
-  components: {
-    HelloWorld
-  },
   data () {
     return {
       // fixed map configuration per level
@@ -287,7 +284,7 @@ export default {
       return this.game.level == Object.keys(this.map).length
     },
   }
-}
+});
 </script>
 
 <style lang="stylus">
