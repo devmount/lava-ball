@@ -32,6 +32,14 @@ export default {
 		target: {x:6,y:6}
 	},
 	5: {
+		x:8, y:8,
+		blocked: [{x:1,y:7},{x:2,y:7},{x:3,y:7},{x:5,y:7},{x:6,y:7},{x:7,y:7},{x:8,y:7},{x:1,y:5},{x:2,y:5},{x:3,y:5},{x:4,y:5},{x:5,y:5},{x:6,y:5},{x:8,y:5},{x:5,y:1},{x:5,y:3},{x:7,y:2},{x:7,y:3}],
+		background: [],
+		trap: [{x:2,y:4},{x:3,y:2},{x:4,y:4},{x:6,y:3}],
+		start: {x:0,y:8},
+		target: {x:1,y:1}
+	},
+	6: {
 		x:10, y:10,
 		blocked: [{x:1,y:1},{x:1,y:2},{x:2,y:1},{x:4,y:4},{x:5,y:4},{x:4,y:5},{x:6,y:4},{x:4,y:6},{x:6,y:5},{x:5,y:6},{x:6,y:6},{x:8,y:2},{x:8,y:3},{x:9,y:3},{x:10,y:10}],
 		background: [{x:0,y:0},{x:0,y:1},{x:1,y:0},{x:11,y:11}],
@@ -39,7 +47,7 @@ export default {
 		start: {x:0,y:10},
 		target: {x:9,y:2}
 	},
-	6: {
+	7: {
 		x:7, y:7,
 		blocked: [],
 		background: [],
