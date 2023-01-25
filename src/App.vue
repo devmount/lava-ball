@@ -12,9 +12,9 @@
   >
     <!-- map section -->
     <div id="map">
-      <div v-for="(y, i) in map[game.level].y+2" class="column">
+      <div v-for="(y, i) in map[game.level].x+2" class="column">
         <div
-          v-for="(x, j) in map[game.level].x+2"
+          v-for="(x, j) in map[game.level].y+2"
           class="cell"
           :class="{
             'blocked': isBlocked(i, j),
