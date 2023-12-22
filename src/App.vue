@@ -9,6 +9,7 @@
     @keydown.down="down"
     @keydown.escape="restart"
     @keydown.enter="next"
+    class="bg-black w-screen h-screen flex justify-center items-center gap-20"
   >
     <!-- map section -->
     <div id="map">
@@ -42,32 +43,30 @@
       ></div>
     </div>
     <!-- dashboard -->
-    <div id="dashboard">
-      <div class="title font-bungee">
-        <h1>
-          <span class="first">Lava</span>
-          <span class="second">Ball</span>
-          <span class="version">v{{ $version }}</span>
-        </h1>
+    <div class="flex flex-col justify-center gap-8">
+      <div class="flex flex-col items-center text-rose-600">
+        <span class="text-3xl font-bungee">Lava</span>
+        <span class="text-6xl font-bungee leading-10">Ball</span>
+        <span>v{{ $version }}</span>
       </div>
-      <div class="controls text-center">
-        <div class="subtitle font-bungee">
-          <h2>Level {{ game.level }}</h2>
+      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center">
+        <div class="text-rose-600 text-center text-4xl font-bungee">
+          Level {{ game.level }}
         </div>
-        <div class="number">
-          <span class="text-4xl font-bungee">{{ player.steps }}</span>
-          <label>steps</label>
+        <div class="flex gap-2 justify-center text-rose-600">
+          <div class="text-4xl font-bungee">{{ player.steps }}</div>
+          <div class="uppercase tracking-widest">steps</div>
         </div>
         <button class="btn btn-block" @click="restart()">Restart Level</button>
         <button class="btn btn-block" v-if="debug" @click="next">Next Level</button>
       </div>
-      <div class="controls text-center">
-        <div class="subtitle font-bungee">
-          <h2>Total</h2>
+      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center">
+        <div class="text-rose-600 text-center text-4xl font-bungee">
+          Total
         </div>
-        <div class="number">
-          <span class="text-4xl font-bungee">{{ game.score }}</span>
-          <label>points</label>
+        <div class="flex gap-2 justify-center text-rose-600">
+          <div class="text-4xl font-bungee">{{ game.score }}</div>
+          <div class="uppercase tracking-widest">points</div>
         </div>
         <button class="btn btn-block" @click="reset">New Game</button>
       </div>

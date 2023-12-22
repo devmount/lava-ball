@@ -14,12 +14,6 @@ $material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.
 
 // layout
 #app
-  background $background
-  height 100vh
-  width 100vw
-  display flex
-  justify-content center
-  align-items center
 
   #map
     display flex
@@ -118,45 +112,6 @@ $material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.
         // transform rotate(0deg)
       &.down
         // transform rotate(180deg)
-  #dashboard
-    display flex
-    justify-content center
-    align-items stretch
-    flex-direction column
-    margin-left 8rem
-
-    .title, .subtitle
-      color $primary
-      text-align center
-      margin-bottom 3rem
-
-      h1
-        position relative
-        display flex
-        flex-direction column
-
-        .first
-          font-size 1.7rem
-          line-height 1.7rem
-        .second
-          font-size 3.3rem
-          line-height 2.5rem
-        .version
-          font-size 1rem
-          line-height 1.5rem
-       
-      h2
-        font-size 2.5rem
-        line-height 2.5rem
-        margin 0
-
-    .controls
-      padding 2rem
-      margin-bottom 2rem
-      background $available
-
-      & > *:not(:last-child)
-        margin-bottom .5rem
 
 // buttons
 .btn
@@ -208,15 +163,6 @@ $material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.
       background $light
       border-color darken($primary, 5%)
       color $primary
-
-// featured numbers
-.number
-  background $available
-  color $primary
-
-  label
-    display inline-block
-    margin-left .5rem
 
 // modal
 .modal
