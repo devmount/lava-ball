@@ -102,7 +102,7 @@
 <script>
 import { defineComponent } from 'vue';
 
-import level from './level'
+import level from './level';
 
 export default defineComponent({
   name: 'App',

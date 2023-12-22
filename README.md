@@ -1,23 +1,25 @@
 # LAVA BALL
 
+Find the gold. Avoid the heat!
+
+## How to play
+
+Use the arrow keys to navigate a little ball to the gold mine. But be warned: there are traps on the way!
+
 ## Project setup
 
 ```bash
-yarn install
+npm install
 ```
 
 ### Compiles and hot-reloads for development
 
 ```bash
-yarn serve
+npm run dev
 ```
 
 ### Compiles and minifies for production
 
 ```bash
-yarn build
+npm run build
 ```
-
-### Customize configuration
-
-See [Configuration Reference](https://cli.vuejs.org/config/).
