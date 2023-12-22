@@ -29,8 +29,8 @@
         </div>
       </div>
       <div
+        class="player"
         :class="{ 
-          player: true,
           right: player.lastDirection == 'right',
           left: player.lastDirection == 'left',
           up: player.lastDirection == 'up',
@@ -43,7 +43,7 @@
     </div>
     <!-- dashboard -->
     <div id="dashboard">
-      <div class="title">
+      <div class="title font-bungee">
         <h1>
           <span class="first">Lava</span>
           <span class="second">Ball</span>
@@ -51,22 +51,22 @@
         </h1>
       </div>
       <div class="controls text-center">
-        <div class="subtitle">
+        <div class="subtitle font-bungee">
           <h2>Level {{ game.level }}</h2>
         </div>
         <div class="number">
-          <span class="size-2x">{{ player.steps }}</span>
+          <span class="text-4xl font-bungee">{{ player.steps }}</span>
           <label>steps</label>
         </div>
         <button class="btn btn-block" @click="restart()">Restart Level</button>
         <button class="btn btn-block" v-if="debug" @click="next">Next Level</button>
       </div>
       <div class="controls text-center">
-        <div class="subtitle">
+        <div class="subtitle font-bungee">
           <h2>Total</h2>
         </div>
         <div class="number">
-          <span class="size-2x">{{ game.score }}</span>
+          <span class="text-4xl font-bungee">{{ game.score }}</span>
           <label>points</label>
         </div>
         <button class="btn btn-block" @click="reset">New Game</button>
@@ -75,14 +75,14 @@
     <!-- modal -->
     <div class="modal" :class="{ 'active': game.finished }">
       <div class="modal-content text-center">
-        <div class="header" v-if="!isLastLevel">Level {{ game.level }} completed!</div>
-        <div class="header" v-else>Game finished!</div>
+        <div class="text-5xl font-bungee" v-if="!isLastLevel">Level {{ game.level }} completed!</div>
+        <div class="text-5xl font-bungee" v-else>Game finished!</div>
         <div class="body">
           <p v-if="!isLastLevel">You currently have {{ game.score }} points.</p>
           <p v-else>Congratulations! You finished the game with {{ game.score }} points.</p>
         </div>
-        <div class="footer">
-          <button class="btn mr-1" @click="restart(false)">Restart Level</button>
+        <div class="mt-8">
+          <button class="btn mr-4" @click="restart(false)">Restart Level</button>
           <button class="btn btn-primary" v-if="!isLastLevel" @click="next">Next Level</button>
           <button class="btn btn-primary" v-else @click="reset">New Game</button>
         </div>
@@ -90,7 +90,7 @@
     </div>
     <!-- footer -->
     <footer>
-      <div class="cursor-pointer fixed-bottom-right" @click="debug = !debug">
+      <div class="cursor-pointer fixed bottom-2 right-2" @click="debug = !debug">
         Debug Mode
         <span v-show="debug">On</span>
         <span v-show="!debug">Off</span>
