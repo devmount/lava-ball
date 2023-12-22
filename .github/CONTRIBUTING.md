@@ -13,11 +13,11 @@ First off, thanks for taking the time to contribute! You are awesome! :tada::cla
 
 ### Reporting Bugs
 
-Before creating bug reports, please make sure there isn't already an existing issue describing your problem, for bugs are tracked as [GitHub issues](https://github.com/devmount/asllpergs-quest/issues). Simply create an issue and provide the necessary information by filling in [the bug-report template](https://github.com/devmount/asllpergs-quest/issues/new?template=bug_report.md).
+Before creating bug reports, please make sure there isn't already an existing issue describing your problem, for bugs are tracked as [GitHub issues](https://github.com/devmount/lava-ball/issues). Simply create an issue and provide the necessary information by filling in [the bug-report template](https://github.com/devmount/lava-ball/issues/new?template=bug_report.md).
 
 ### Suggesting Enhancements
 
-Enhancement suggestions are also tracked as [GitHub issues](https://github.com/devmount/asllpergs-quest/issues). Before creating enhancement suggestions, please check the existing issues as you might find out that you don't need to create one. When you are creating an enhancement suggestion, please include as many details as possible. Fill in [the feature-request template](https://github.com/devmount/asllpergs-quest/issues/new?template=feature_request.md), including the steps that you imagine you would take if the feature you're requesting existed.
+Enhancement suggestions are also tracked as [GitHub issues](https://github.com/devmount/lava-ball/issues). Before creating enhancement suggestions, please check the existing issues as you might find out that you don't need to create one. When you are creating an enhancement suggestion, please include as many details as possible. Fill in [the feature-request template](https://github.com/devmount/lava-ball/issues/new?template=feature_request.md), including the steps that you imagine you would take if the feature you're requesting existed.
 
 ### Pull Requests
 

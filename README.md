@@ -1,4 +1,4 @@
-# asllpergs-quest
+# LAVA BALL
 
 ## Project setup
 
