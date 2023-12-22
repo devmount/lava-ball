@@ -45,8 +45,8 @@
     <div id="dashboard">
       <div class="title">
         <h1>
-          <span class="first">Asllperg's</span>
-          <span class="second">Quest</span>
+          <span class="first">Lava</span>
+          <span class="second">Ball</span>
           <span class="version">v{{ $version }}</span>
         </h1>
       </div>
@@ -102,7 +102,7 @@
 <script>
 import { defineComponent } from 'vue';
 
-import level from './level'
+import level from './level';
 
 export default defineComponent({
   name: 'App',
