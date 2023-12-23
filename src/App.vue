@@ -9,7 +9,7 @@
     @keydown.down="down"
     @keydown.escape="restart"
     @keydown.enter="next"
-    class="bg-black w-screen h-screen flex justify-center items-center gap-20"
+    class="relative bg-black w-screen h-screen flex justify-center items-center gap-20"
   >
     <!-- map section -->
     <div id="map">
@@ -72,11 +72,18 @@
       </div>
     </div>
     <!-- modal -->
-    <div class="modal" :class="{ 'active': game.finished }">
-      <div class="modal-content text-center">
-        <div class="text-5xl font-bungee" v-if="!isLastLevel">Level {{ game.level }} completed!</div>
-        <div class="text-5xl font-bungee" v-else>Game finished!</div>
-        <div class="body">
+    <div
+      class="bg-stone-900 text-stone-100 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 p-8 opacity-0 invisible box-border transition-all shadow-[0_0_100vw_100vw_rgba(0,0,0,.5)]"
+      :class="{ '!w-3/5 !opacity-100 !visible animate-wave-once': game.finished }"
+    >
+      <div class="text-center">
+        <div v-if="!isLastLevel" class="text-5xl font-bungee">
+          Level {{ game.level }} completed!
+        </div>
+        <div v-else class="text-5xl font-bungee">
+          Game finished!
+        </div>
+        <div>
           <p v-if="!isLastLevel">You currently have {{ game.score }} points.</p>
           <p v-else>Congratulations! You finished the game with {{ game.score }} points.</p>
         </div>

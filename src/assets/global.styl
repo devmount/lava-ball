@@ -164,29 +164,6 @@ $material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.
       border-color darken($primary, 5%)
       color $primary
 
-// modal
-.modal
-  background $available
-  color $light
-  position absolute
-  top 50%
-  left 50%
-  transform translate(-50%, -50%)
-  width 50%
-  height auto
-  padding 2rem
-  opacity 0
-  visibility hidden
-  box-shadow 0 0 100vw 100vw rgba(0,0,0,.5)
-  box-sizing border-box
-  transition all .4s ease-in-out
-
-  &.active
-    width 60%
-    opacity 1
-    visibility visible
-    animation finished 1s both
-
 // animations
 @keyframes idle
   from
@@ -201,15 +178,3 @@ $material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.
     box-shadow 0 0 .8rem -.4rem $target
   to
     box-shadow 0 0 2rem -.4rem $target
-
-@keyframes finished
-  0%
-    transform translate(-50%, -50%) scaleX(1);
-  10%, 20%
-    transform translate(-50%, -50%) scale3d(.9,.9,.9) rotate(-3deg);
-  30%, 60%, 90%
-    transform translate(-50%, -50%) scale3d(1.1,1.1,1.1) rotate(3deg);
-  45%, 75%
-    transform translate(-50%, -50%) scale3d(1.1,1.1,1.1) rotate(-3deg);
-  100%
-    transform translate(-50%, -50%) scaleX(1);
