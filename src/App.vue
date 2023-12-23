@@ -57,8 +57,8 @@
           <div class="text-4xl font-bungee">{{ player.steps }}</div>
           <div class="uppercase tracking-widest">steps</div>
         </div>
-        <button class="btn btn-block" @click="restart()">Restart Level</button>
-        <button class="btn btn-block" v-if="debug" @click="next">Next Level</button>
+        <button class="btn-block" @click="restart()">Restart Level</button>
+        <button class="btn-block" v-if="debug" @click="next">Next Level</button>
       </div>
       <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center">
         <div class="text-rose-600 text-center text-4xl font-bungee">
@@ -68,7 +68,7 @@
           <div class="text-4xl font-bungee">{{ game.score }}</div>
           <div class="uppercase tracking-widest">points</div>
         </div>
-        <button class="btn btn-block" @click="reset">New Game</button>
+        <button class="btn-block" @click="reset">New Game</button>
       </div>
     </div>
     <!-- modal -->
@@ -88,9 +88,9 @@
           <p v-else>Congratulations! You finished the game with {{ game.score }} points.</p>
         </div>
         <div class="mt-8">
-          <button class="btn mr-4" @click="restart(false)">Restart Level</button>
-          <button class="btn btn-primary" v-if="!isLastLevel" @click="next">Next Level</button>
-          <button class="btn btn-primary" v-else @click="reset">New Game</button>
+          <button class="mr-4" @click="restart(false)">Restart Level</button>
+          <button-primary v-if="!isLastLevel" @click="next">Next Level</button-primary>
+          <button-primary v-else @click="reset">New Game</button-primary>
         </div>
       </div>
     </div>
@@ -107,11 +107,14 @@
 
 <script>
 import { defineComponent } from 'vue';
-
+import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import level from './level';
 
 export default defineComponent({
   name: 'App',
+  components: {
+    ButtonPrimary
+  },
   data () {
     return {
       // fixed map configuration per level

@@ -9,3 +9,14 @@
   font-display: swap;
   src: url(./assets/Bungee-Regular.ttf);
 }
+
+@layer base {
+  button {
+    @apply
+      border border-rose-600 rounded text-rose-500 cursor-pointer px-3 py-2 transition-all
+      select-none whitespace-nowrap uppercase tracking-widest
+      hover:outline outline-8 outline-offset-1 outline-rose-500/20
+      hover:text-rose-400 hover:bg-rose-900/50 active:!text-white active:!bg-rose-900
+    ;
+  }
+}

@@ -113,57 +113,6 @@ $material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.
       &.down
         // transform rotate(180deg)
 
-// buttons
-.btn
-  appearance none
-  background $available
-  border .04rem solid $primary
-  border-radius 0
-  color $primary
-  cursor pointer
-  display inline-block
-  outline none
-  padding .6rem .8rem
-  text-decoration none
-  transition background .2s, border .2s, box-shadow .2s, color .2s
-  user-select none
-  vertical-align middle
-  white-space nowrap
-  text-transform uppercase
-  letter-spacing .2rem
-  &:hover
-    box-shadow 0 0 0 .4rem rgba($primary, .2)
-  &:focus,
-  &:hover
-    background rgba($primary, .2)
-    border-color $primary
-    text-decoration none
-  &:active,
-  &.active
-    background $primary
-    border-color darken($primary, 5%)
-    color $light
-    text-decoration none
-
-  &.btn-block
-    display block
-    width 100%
-
-  &.btn-primary
-    background $primary
-    border-color darken($primary, 5%)
-    color $light
-    text-decoration none
-
-    &:focus,
-    &:hover
-      background rgba($primary, .8)
-    &:active,
-    &.active
-      background $light
-      border-color darken($primary, 5%)
-      color $primary
-
 // animations
 @keyframes idle
   from
