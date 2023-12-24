@@ -26,7 +26,7 @@
             'target-closed': isTarget(i, j) && finished,
           }"
         >
-        <span v-if="debug">{{i}},{{j}}</span>
+          <span v-if="debug">{{i}},{{j}}</span>
         </div>
       </div>
       <div
@@ -49,7 +49,7 @@
         <span class="text-6xl font-bungee leading-10">Ball</span>
         <span>v{{ $version }}</span>
       </div>
-      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center">
+      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
         <div class="text-rose-600 text-center text-4xl font-bungee">
           Level {{ game.level }}
         </div>
@@ -60,7 +60,7 @@
         <button class="btn-block" @click="restart()">Restart Level</button>
         <button class="btn-block" v-if="debug" @click="next">Next Level</button>
       </div>
-      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center">
+      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
         <div class="text-rose-600 text-center text-4xl font-bungee">
           Total
         </div>
@@ -72,10 +72,7 @@
       </div>
     </div>
     <!-- modal -->
-    <div
-      class="bg-stone-900 text-stone-100 absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-1/2 p-8 opacity-0 invisible box-border transition-all shadow-[0_0_100vw_100vw_rgba(0,0,0,.5)]"
-      :class="{ '!w-3/5 !opacity-100 !visible animate-wave-once': game.finished }"
-    >
+    <modal :active="game.finished">
       <div class="text-center">
         <div v-if="!isLastLevel" class="text-5xl font-bungee">
           Level {{ game.level }} completed!
@@ -93,7 +90,7 @@
           <button-primary v-else @click="reset">New Game</button-primary>
         </div>
       </div>
-    </div>
+    </modal>
     <!-- footer -->
     <footer>
       <div class="cursor-pointer fixed bottom-2 right-2" @click="debug = !debug">
@@ -108,12 +105,14 @@
 <script>
 import { defineComponent } from 'vue';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
+import Modal from "@/components/Modal.vue";
 import level from './level';
 
 export default defineComponent({
   name: 'App',
   components: {
-    ButtonPrimary
+    ButtonPrimary,
+    Modal,
   },
   data () {
     return {
