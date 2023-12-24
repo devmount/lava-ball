@@ -12,35 +12,33 @@
     class="relative bg-black w-screen h-screen flex justify-center items-center gap-20"
   >
     <!-- map section -->
-    <div id="map">
-      <div v-for="(y, i) in map[game.level].x+2" class="column">
+    <div id="map" class="flex justify-center items-center relative">
+      <div v-for="(y, i) in map[game.level].x+2">
         <div
           v-for="(x, j) in map[game.level].y+2"
           class="cell"
           :class="{
-            'blocked': isBlocked(i, j),
-            'background': isBackground(i, j),
-            'trap': isTrap(i, j),
-            'start': isStart(i, j) && game.init,
-            'target': isTarget(i, j),
-            'target-closed': isTarget(i, j) && finished,
+            blocked: isBlocked(i, j),
+            background: isBackground(i, j),
+            trap: isTrap(i, j),
+            start: isStart(i, j) && game.init,
+            target: isTarget(i, j),
+            targetClosed: isTarget(i, j) && finished,
           }"
         >
           <span v-if="debug">{{i}},{{j}}</span>
         </div>
       </div>
-      <div
-        class="player"
-        :class="{ 
-          right: player.lastDirection == 'right',
-          left: player.lastDirection == 'left',
-          up: player.lastDirection == 'up',
-          down: player.lastDirection == 'down',
-          exit: finished,
-          trapped: trapped,
-        }"
-        ref="player"
-      ></div>
+      <div ref="player" class="absolute w-16 h-16">
+        <div
+          class="
+            absolute top-10 left-1/2 -translate-x-/12 -translate-y-1/2 w-10 h-10 rounded-full
+            bg-gradient-to-br from-rose-500 to-rose-700 shadow-[0_1.6rem_2.4rem_1.2rem_#000]
+            animation-idle transition-all
+          "
+          :class="{ 'top-4 animate-none shadow w-0 h-0 opacity-0': finished || trapped }"
+        ></div>
+      </div>
     </div>
     <!-- dashboard -->
     <div class="flex flex-col justify-center gap-8">
@@ -106,6 +104,7 @@
 import { defineComponent } from 'vue';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import Modal from "@/components/Modal.vue";
+// import Player from "@/components/Player.vue";
 import level from './level';
 
 export default defineComponent({
@@ -113,6 +112,7 @@ export default defineComponent({
   components: {
     ButtonPrimary,
     Modal,
+    // Player,
   },
   data () {
     return {
@@ -130,7 +130,6 @@ export default defineComponent({
         x:0, y:0,
         active: true,
         steps: 0,
-        lastDirection: 'right',
       },
       // for development
       debug: false
@@ -206,28 +205,24 @@ export default defineComponent({
     },
     // move player one cell left
     left () {
-      this.lastDirection = 'left'
       if (!this.isBlocked(this.player.x-1, this.player.y) && this.player.x > 0) {
         this.go(this.player.x-1, this.player.y)
       }
     },
     // move player one cell right
     right () {
-      this.lastDirection = 'right'
       if (!this.isBlocked(this.player.x+1, this.player.y) && this.player.x < this.map[this.game.level].x) {
         this.go(this.player.x+1, this.player.y)
       }
     },
     // move player one cell up
     up () {
-      this.lastDirection = 'up'
       if (!this.isBlocked(this.player.x, this.player.y-1) && this.player.y > 0) {
         this.go(this.player.x, this.player.y-1)
       }
     },
     // move player one cell down
     down () {
-      this.lastDirection = 'down'
       if (!this.isBlocked(this.player.x, this.player.y+1) && this.player.y < this.map[this.game.level].y) {
         this.go(this.player.x, this.player.y+1)
       }

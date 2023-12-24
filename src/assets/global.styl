@@ -16,102 +16,53 @@ $material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.
 #app
 
   #map
-    display flex
-    justify-content center
-    align-items center
-    flex-direction row
-    position relative
 
-    .column
-      justify-content center
-      align-items center
-      flex-direction column
-
-      .cell
-        background $material-carbon
-        background-color #282828
-        background-size 1rem 1rem
-        position relative
-        width 4rem
-        height 4rem
-        box-sizing border-box
-        border 1px solid $available
-        color white // for debug purposes
-        transition all .5s
-
-        &.blocked
-          &:not(.start)
-            background $background
-            border none
-          &:not(.start):not(.background)
-            border-top .8rem solid #333
-            border-left .8rem solid #333
-            border-bottom .8rem solid #111
-            border-right .8rem solid #111
-        &.trap
-          background $material-lava
-          border $unit4 solid rgba($background, .8)
-        &.target
-          background $available
-        &.target::before, &.target::after
-          content ''
-          display block
-          position absolute
-          width 70%
-          height 70%
-          top 50%
-          left 50%
-          transform translate(-50%, -50%)
-        &.target::after
-          background $target
-          transition width 1s .3s, height 1s .3s
-          animation glow 2s 0s infinite linear alternate
-        &.target-closed::before
-          transition opacity 1s .5s
-          background $background
-          opacity 0
-        &.target-closed::after
-          width 0
-          height 0
-
-    .player
-      position absolute
+    .cell
+      background $material-carbon
+      background-color #282828
+      background-size 1rem 1rem
+      position relative
       width 4rem
       height 4rem
-      transition left .2s, top .2s, transform .1s
+      box-sizing border-box
+      border 1px solid $available
+      color white // for debug purposes
+      transition all .5s
 
-      &::after
+      &.blocked
+        &:not(.start)
+          background $background
+          border none
+        &:not(.start):not(.background)
+          border-top .8rem solid #333
+          border-left .8rem solid #333
+          border-bottom .8rem solid #111
+          border-right .8rem solid #111
+      &.trap
+        background $material-lava
+        border $unit4 solid rgba($background, .8)
+      &.target
+        background $available
+      &.target::before, &.target::after
         content ''
-        display inline-block
+        display block
         position absolute
-        top 2.4rem
+        width 70%
+        height 70%
+        top 50%
         left 50%
-        transform translate(-50%)
-        width 2.4rem
-        height 2.4rem
-        border-radius 50%
-        background-color $primary
-        background-image linear-gradient(-45deg, rgba($background,.6) 0%, transparent 100%);
-        box-shadow 0 1.6rem 2.4rem 1.2rem $background
-        animation idle 1s 0s infinite cubic-bezier(.65,.05,.36,1) alternate
-        transition height 1s, width 1s, opacity .5s
-      &.exit::after,
-      &.trapped::after
-        top 1.2rem
-        animation none
-        box-shadow none
+        transform translate(-50%, -50%)
+      &.target::after
+        background $target
+        transition width 1s .3s, height 1s .3s
+        animation glow 2s 0s infinite linear alternate
+      &.target-closed::before
+        transition opacity 1s .5s
+        background $background
+        opacity 0
+      &.target-closed::after
         width 0
         height 0
-        opacity 0
-
-      &.right
-        // transform rotate(90deg)
-      &.left
-        // transform rotate(-90deg)
-      &.up
-        // transform rotate(0deg)
-      &.down
-        // transform rotate(180deg)
 
 // animations
 @keyframes idle
