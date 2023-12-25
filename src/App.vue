@@ -130,7 +130,7 @@ export default defineComponent({
       map: level,
       // game configuration
       game: {
-        level: 10,
+        level: 1,
         init: true,
         finished: false,
         score: 0,
