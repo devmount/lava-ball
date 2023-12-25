@@ -6,10 +6,14 @@ export default {
         'wave-once': 'wave 1s both',
         'idle': 'idle 1s 0s infinite cubic-bezier(.65,.05,.36,1) alternate',
         'glow': 'glow 2s 0s infinite linear alternate',
+        'waft': 'waft 2s 0s infinite linear alternate',
       },
       borderWidth: {
         '12': '12px',
         '32': '32px',
+      },
+      boxShadow: {
+        'inner-lg': 'inset 4px 4px 16px 4px rgb(0 0 0 / 0.15)'
       },
       fontFamily: {
         bungee: ["Bungee", "cursive"],
@@ -28,7 +32,11 @@ export default {
         glow: {
           '0%': { boxShadow: '0 0 .8rem -.4rem yellow' },
           '100%': { boxShadow: '0 0 2rem -.4rem yellow' },
-        }
+        },
+        waft: {
+          '0%': { backgroundColor: '#991b1b' },
+          '100%': { backgroundColor: '#ef4444' },
+        },
       },
     },
   },

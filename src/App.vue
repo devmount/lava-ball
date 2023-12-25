@@ -19,11 +19,11 @@
           class="cell relative size-16 box-border transition-all duration-500"
           :class="{
             // unreachable block and start after first move
-            'bg-stone-950 border-12 border-t-stone-800/60 border-l-stone-800/60 border-b-black border-r-black': isBlocked(i, j) && !(isStart(i, j) && game.init),
+            'bg-stone-950 border-12 border-t-stone-800/60 border-l-stone-800/60 border-b-black border-r-black shadow-xl shadow-black/70 z-10': isBlocked(i, j) && !(isStart(i, j) && game.init),
             // background like field
             'bg-transparent !border-none': isBackground(i, j),
             // lava trap
-            'bg-lava border-8 border-stone-900/80': isTrap(i, j),
+            'bg-lava animate-waft shadow-inner-lg shadow-black ': isTrap(i, j),
             // target and target glow
             'bg-yellow-500 border-12 border-stone-900/90': isTarget(i, j),
             'after:absolute after:size-full after:animate-glow': isTarget(i, j),
@@ -31,6 +31,9 @@
             'border-32': isTarget(i, j) && finished,
             // normal ground
             'bg-carbon border border-stone-900/50': isGround(i, j) || (isStart(i, j) && game.init),
+          }"
+          :style="{
+            animationDelay: '-' + Math.floor((j+i) * 500) + 'ms'
           }"
         >
           <span v-if="debug" class="text-white">{{i}},{{j}}</span>
@@ -43,7 +46,7 @@
             bg-gradient-to-br from-rose-500 to-rose-700
             animate-idle transition-all duration-300
           "
-          :class="{ 'top-4 animate-none shadow size-0 opacity-0': finished || trapped }"
+          :class="{ 'top-5 animate-none shadow !size-0 opacity-0': finished || trapped }"
         ></div>
       </div>
     </div>
@@ -127,7 +130,7 @@ export default defineComponent({
       map: level,
       // game configuration
       game: {
-        level: 1,
+        level: 10,
         init: true,
         finished: false,
         score: 0,
