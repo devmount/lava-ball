@@ -63,18 +63,3 @@ $material-lava = repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.
       &.target-closed::after
         width 0
         height 0
-
-// animations
-@keyframes idle
-  from
-    top .6rem
-    box-shadow 0 .6rem 2.4rem -.2rem $background
-  to
-    top 0
-    box-shadow 0 1.6rem 2.4rem -.2rem $background
-
-@keyframes glow
-  from
-    box-shadow 0 0 .8rem -.4rem $target
-  to
-    box-shadow 0 0 2rem -.4rem $target
