@@ -1,12 +1,12 @@
 <template>
-  <div ref="player" class="absolute w-16 h-16">
+  <div ref="player" class="absolute size-16 transition-all">
     <div
       class="
-        absolute top-10 left-1/2 -translate-x-/12 -translate-y-1/2 w-10 h-10 rounded-full
-        bg-gradient-to-br from-rose-500 to-rose-700 shadow-[0_1.6rem_2.4rem_1.2rem_#000]
-        animation-idle transition-all
+        absolute top-10 left-1/2 -translate-x-1/2 translate-y-1/4 size-10 rounded-full
+        bg-gradient-to-br from-rose-500 to-rose-700
+        animate-idle transition-all
       "
-      :class="{ 'top-4 animate-none shadow w-0 h-0 opacity-0': exit }"
+      :class="{ 'top-4 animate-none shadow size-0 opacity-0': exit }"
     ></div>
   </div>
 </template>

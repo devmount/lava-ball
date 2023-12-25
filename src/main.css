@@ -16,7 +16,24 @@
       border border-rose-600 rounded text-rose-500 cursor-pointer px-3 py-2 transition-all
       select-none whitespace-nowrap uppercase tracking-widest
       hover:outline outline-8 outline-offset-1 outline-rose-500/20
-      hover:text-rose-400 hover:bg-rose-900/50 active:!text-white active:!bg-rose-900
-    ;
+      hover:text-rose-400 hover:bg-rose-900/50 active:!text-white active:!bg-rose-900;
   }
+}
+
+.bg-carbon {
+  background:
+    radial-gradient(black 15%, transparent 16%) 0 0,
+    radial-gradient(black 15%, transparent 16%) .5rem .5rem,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) 0 1px,
+    radial-gradient(rgba(255,255,255,.1) 15%, transparent 20%) .5rem 9px;
+  background-size: 1rem 1rem;
+  @apply bg-stone-800;
+}
+
+.bg-lava {
+  background:
+    repeating-linear-gradient(45deg, rgba(0,0,0,0.8), rgba(0,0,0,0.8) 8px,transparent 0px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(0,0,0,0.5), rgba(0,0,0,0.5) 8px, transparent 0px, transparent 16px);
+  background-size: 4rem 4rem;
+  @apply bg-red-600;
 }

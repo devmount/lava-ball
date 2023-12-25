@@ -16,27 +16,34 @@
       <div v-for="(y, i) in map[game.level].x+2">
         <div
           v-for="(x, j) in map[game.level].y+2"
-          class="cell"
+          class="cell relative size-16 box-border transition-all duration-500"
           :class="{
-            blocked: isBlocked(i, j),
-            background: isBackground(i, j),
-            trap: isTrap(i, j),
-            start: isStart(i, j) && game.init,
-            target: isTarget(i, j),
-            targetClosed: isTarget(i, j) && finished,
+            // unreachable block and start after first move
+            'bg-stone-950 border-12 border-t-stone-800/60 border-l-stone-800/60 border-b-black border-r-black': isBlocked(i, j) && !(isStart(i, j) && game.init),
+            // background like field
+            'bg-transparent !border-none': isBackground(i, j),
+            // lava trap
+            'bg-lava border-8 border-stone-900/80': isTrap(i, j),
+            // target and target glow
+            'bg-yellow-500 border-12 border-stone-900/90': isTarget(i, j),
+            'after:absolute after:size-full after:animate-glow': isTarget(i, j),
+            // target reached
+            'border-32': isTarget(i, j) && finished,
+            // normal ground
+            'bg-carbon border border-stone-900/50': isGround(i, j) || (isStart(i, j) && game.init),
           }"
         >
-          <span v-if="debug">{{i}},{{j}}</span>
+          <span v-if="debug" class="text-white">{{i}},{{j}}</span>
         </div>
       </div>
-      <div ref="player" class="absolute w-16 h-16 transition-all">
+      <div ref="player" class="absolute size-16 transition-all">
         <div
           class="
-            absolute top-10 left-1/2 -translate-x-1/2 translate-y-1/4 w-10 h-10 rounded-full
+            absolute top-10 left-1/2 -translate-x-1/2 translate-y-1/4 size-10 rounded-full
             bg-gradient-to-br from-rose-500 to-rose-700
-            animate-idle transition-all
+            animate-idle transition-all duration-300
           "
-          :class="{ 'top-4 animate-none shadow w-0 h-0 opacity-0': finished || trapped }"
+          :class="{ 'top-4 animate-none shadow size-0 opacity-0': finished || trapped }"
         ></div>
       </div>
     </div>
@@ -186,6 +193,10 @@ export default defineComponent({
     isTarget (x, y) {
       return this.eq(this.map[this.game.level].target, {x:x,y:y})
     },
+    // check if cell is normal ground
+    isGround (x, y) {
+      return !this.isBlocked(x, y) && !this.isBackground(x, y) && !this.isTrap(x, y) && !this.isTarget(x, y);
+    },
     // move player to given position, if game isn't already finished
     go (x, y) {
       // only move player if game is not finished
@@ -289,7 +300,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style lang="stylus">
-@import "assets/global"
-</style>

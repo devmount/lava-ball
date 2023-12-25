@@ -7,6 +7,10 @@ export default {
         'idle': 'idle 1s 0s infinite cubic-bezier(.65,.05,.36,1) alternate',
         'glow': 'glow 2s 0s infinite linear alternate',
       },
+      borderWidth: {
+        '12': '12px',
+        '32': '32px',
+      },
       fontFamily: {
         bungee: ["Bungee", "cursive"],
       },
@@ -22,8 +26,8 @@ export default {
           '100%': { top: '0', boxShadow: '0 1.6rem 2.4rem 0 #000' },
         },
         glow: {
-          '0%': { boxShadow: 'box-shadow 0 0 .8rem -.4rem gold' },
-          '100%': { boxShadow: 'box-shadow 0 0 2rem -.4rem gold' },
+          '0%': { boxShadow: '0 0 .8rem -.4rem yellow' },
+          '100%': { boxShadow: '0 0 2rem -.4rem yellow' },
         }
       },
     },
