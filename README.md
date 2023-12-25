@@ -4,7 +4,7 @@ Find the gold. Avoid the heat!
 
 > This is just a little game I made for my kids to practice hands-eye-coordination and directions. Some of the levels the kids draw on a paper and I implemented them accordingly.
 
-![image](https://github.com/devmount/lava-ball/assets/5441654/4549d1e5-5afc-4dfb-859a-0a8a3742df64)
+![Screenshot of level 10](https://github.com/devmount/lava-ball/assets/5441654/c869e440-36af-4118-82e7-369d2ec117ee)
 
 ## How to play
 
