@@ -9,88 +9,99 @@
     @keydown.down="down"
     @keydown.escape="restart"
     @keydown.enter="next"
+    class="relative bg-black w-screen h-screen flex justify-center items-center gap-20"
   >
     <!-- map section -->
-    <div id="map">
-      <div v-for="(y, i) in map[game.level].x+2" class="column">
+    <div id="map" class="flex justify-center items-center relative">
+      <div v-for="(y, i) in map[game.level].x+2">
         <div
           v-for="(x, j) in map[game.level].y+2"
-          class="cell"
+          class="cell relative size-16 box-border transition-all duration-500"
           :class="{
-            'blocked': isBlocked(i, j),
-            'background': isBackground(i, j),
-            'trap': isTrap(i, j),
-            'start': isStart(i, j) && game.init,
-            'target': isTarget(i, j),
-            'target-closed': isTarget(i, j) && finished,
+            // unreachable block and start after first move
+            'bg-stone-950 border-12 border-t-stone-800/60 border-l-stone-800/60 border-b-black border-r-black shadow-xl shadow-black/70 z-10': isBlocked(i, j) && !(isStart(i, j) && game.init),
+            // background like field
+            'bg-transparent !border-none': isBackground(i, j),
+            // lava trap
+            'bg-lava animate-waft shadow-inner-lg shadow-black ': isTrap(i, j),
+            // target and target glow
+            'bg-yellow-500 border-12 border-stone-900/90': isTarget(i, j),
+            'after:absolute after:size-full after:animate-glow': isTarget(i, j),
+            // target reached
+            'border-32': isTarget(i, j) && finished,
+            // normal ground
+            'bg-carbon border border-stone-900/50': isGround(i, j) || (isStart(i, j) && game.init),
+          }"
+          :style="{
+            animationDelay: '-' + Math.floor((j+i) * 500) + 'ms'
           }"
         >
-        <span v-if="debug">{{i}},{{j}}</span>
+          <span v-if="debug" class="text-white">{{i}},{{j}}</span>
         </div>
       </div>
-      <div
-        :class="{ 
-          player: true,
-          right: player.lastDirection == 'right',
-          left: player.lastDirection == 'left',
-          up: player.lastDirection == 'up',
-          down: player.lastDirection == 'down',
-          exit: finished,
-          trapped: trapped,
-        }"
-        ref="player"
-      ></div>
+      <div ref="player" class="absolute size-16 transition-all">
+        <div
+          class="
+            absolute top-10 left-1/2 -translate-x-1/2 translate-y-1/4 size-10 rounded-full
+            bg-gradient-to-br from-rose-500 to-rose-700
+            animate-idle transition-all duration-300
+          "
+          :class="{ 'top-5 animate-none shadow !size-0 opacity-0': finished || trapped }"
+        ></div>
+      </div>
     </div>
     <!-- dashboard -->
-    <div id="dashboard">
-      <div class="title">
-        <h1>
-          <span class="first">Lava</span>
-          <span class="second">Ball</span>
-          <span class="version">v{{ $version }}</span>
-        </h1>
+    <div class="flex flex-col justify-center gap-8">
+      <div class="flex flex-col items-center text-rose-600">
+        <span class="text-3xl font-bungee">Lava</span>
+        <span class="text-6xl font-bungee leading-10">Ball</span>
+        <span>v{{ $version }}</span>
       </div>
-      <div class="controls text-center">
-        <div class="subtitle">
-          <h2>Level {{ game.level }}</h2>
+      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
+        <div class="text-rose-600 text-center text-4xl font-bungee">
+          Level {{ game.level }}
         </div>
-        <div class="number">
-          <span class="size-2x">{{ player.steps }}</span>
-          <label>steps</label>
+        <div class="flex gap-2 justify-center text-rose-600">
+          <div class="text-4xl font-bungee">{{ player.steps }}</div>
+          <div class="uppercase tracking-widest">steps</div>
         </div>
-        <button class="btn btn-block" @click="restart()">Restart Level</button>
-        <button class="btn btn-block" v-if="debug" @click="next">Next Level</button>
+        <button class="btn-block" @click="restart()">Restart Level</button>
+        <button class="btn-block" v-if="debug" @click="next">Next Level</button>
       </div>
-      <div class="controls text-center">
-        <div class="subtitle">
-          <h2>Total</h2>
+      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
+        <div class="text-rose-600 text-center text-4xl font-bungee">
+          Total
         </div>
-        <div class="number">
-          <span class="size-2x">{{ game.score }}</span>
-          <label>points</label>
+        <div class="flex gap-2 justify-center text-rose-600">
+          <div class="text-4xl font-bungee">{{ game.score }}</div>
+          <div class="uppercase tracking-widest">points</div>
         </div>
-        <button class="btn btn-block" @click="reset">New Game</button>
+        <button class="btn-block" @click="reset">New Game</button>
       </div>
     </div>
     <!-- modal -->
-    <div class="modal" :class="{ 'active': game.finished }">
-      <div class="modal-content text-center">
-        <div class="header" v-if="!isLastLevel">Level {{ game.level }} completed!</div>
-        <div class="header" v-else>Game finished!</div>
-        <div class="body">
+    <modal :active="game.finished">
+      <div class="text-center">
+        <div v-if="!isLastLevel" class="text-5xl font-bungee">
+          Level {{ game.level }} completed!
+        </div>
+        <div v-else class="text-5xl font-bungee">
+          Game finished!
+        </div>
+        <div>
           <p v-if="!isLastLevel">You currently have {{ game.score }} points.</p>
           <p v-else>Congratulations! You finished the game with {{ game.score }} points.</p>
         </div>
-        <div class="footer">
-          <button class="btn mr-1" @click="restart(false)">Restart Level</button>
-          <button class="btn btn-primary" v-if="!isLastLevel" @click="next">Next Level</button>
-          <button class="btn btn-primary" v-else @click="reset">New Game</button>
+        <div class="mt-8">
+          <button class="mr-4" @click="restart(false)">Restart Level</button>
+          <button-primary v-if="!isLastLevel" @click="next">Next Level</button-primary>
+          <button-primary v-else @click="reset">New Game</button-primary>
         </div>
       </div>
-    </div>
+    </modal>
     <!-- footer -->
     <footer>
-      <div class="cursor-pointer fixed-bottom-right" @click="debug = !debug">
+      <div class="cursor-pointer fixed bottom-2 right-2" @click="debug = !debug">
         Debug Mode
         <span v-show="debug">On</span>
         <span v-show="!debug">Off</span>
@@ -101,11 +112,18 @@
 
 <script>
 import { defineComponent } from 'vue';
-
+import ButtonPrimary from "@/components/ButtonPrimary.vue";
+import Modal from "@/components/Modal.vue";
+// import Player from "@/components/Player.vue";
 import level from './level';
 
 export default defineComponent({
   name: 'App',
+  components: {
+    ButtonPrimary,
+    Modal,
+    // Player,
+  },
   data () {
     return {
       // fixed map configuration per level
@@ -122,7 +140,6 @@ export default defineComponent({
         x:0, y:0,
         active: true,
         steps: 0,
-        lastDirection: 'right',
       },
       // for development
       debug: false
@@ -179,6 +196,10 @@ export default defineComponent({
     isTarget (x, y) {
       return this.eq(this.map[this.game.level].target, {x:x,y:y})
     },
+    // check if cell is normal ground
+    isGround (x, y) {
+      return !this.isBlocked(x, y) && !this.isBackground(x, y) && !this.isTrap(x, y) && !this.isTarget(x, y);
+    },
     // move player to given position, if game isn't already finished
     go (x, y) {
       // only move player if game is not finished
@@ -198,28 +219,24 @@ export default defineComponent({
     },
     // move player one cell left
     left () {
-      this.lastDirection = 'left'
       if (!this.isBlocked(this.player.x-1, this.player.y) && this.player.x > 0) {
         this.go(this.player.x-1, this.player.y)
       }
     },
     // move player one cell right
     right () {
-      this.lastDirection = 'right'
       if (!this.isBlocked(this.player.x+1, this.player.y) && this.player.x < this.map[this.game.level].x) {
         this.go(this.player.x+1, this.player.y)
       }
     },
     // move player one cell up
     up () {
-      this.lastDirection = 'up'
       if (!this.isBlocked(this.player.x, this.player.y-1) && this.player.y > 0) {
         this.go(this.player.x, this.player.y-1)
       }
     },
     // move player one cell down
     down () {
-      this.lastDirection = 'down'
       if (!this.isBlocked(this.player.x, this.player.y+1) && this.player.y < this.map[this.game.level].y) {
         this.go(this.player.x, this.player.y+1)
       }
@@ -286,7 +303,3 @@ export default defineComponent({
   }
 });
 </script>
-
-<style lang="stylus">
-@import "assets/global"
-</style>
