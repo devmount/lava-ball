@@ -9,8 +9,48 @@
     @keydown.down="down"
     @keydown.escape="restart"
     @keydown.enter="next"
+    @keydown.1="player.color = 1"
+    @keydown.2="player.color = 2"
+    @keydown.3="player.color = 3"
     class="relative bg-black w-screen h-screen flex justify-center items-center gap-20"
   >
+    <!-- start section -->
+    <div v-if="!game.started" class="absolute z-50 size-full bg-black flex flex-col justify-center items-center gap-8">
+      <brand />
+      <div class="block w-1/2 p-16 flex justify-center items-center gap-16">
+        <div class="flex flex-col gap-8">
+          <div class="text-stone-600 text-4xl font-bungee">{{ t('chooseColor') }}</div>
+          <div class="flex justify-center items-center gap-4">
+            <div
+              class="cursor-pointer transition-all size-10 border-4 border-rose-700 bg-rose-500"
+              :class="{ 'outline outline-8 outline-stone-800': player.color === 1 }"
+              @click="player.color = 1"
+            ></div>
+            <div
+              class="cursor-pointer transition-all size-10 border-4 border-green-700 bg-green-500"
+              :class="{ 'outline outline-8 outline-stone-800': player.color === 2 }"
+              @click="player.color = 2"
+            ></div>
+            <div
+              class="cursor-pointer transition-all size-10 border-4 border-violet-700 bg-violet-500"
+              :class="{ 'outline outline-8 outline-stone-800': player.color === 3 }"
+              @click="player.color = 3"
+            ></div>
+            <button @click="start()" class="ml-4">
+              {{ t('startGame') }}
+            </button>
+          </div>
+        </div>
+        <div
+          class="size-44 shrink-0 rounded-full bg-gradient-to-br animate-bounce"
+          :class="{
+            'from-rose-500 to-rose-700': player.color === 1,
+            'from-green-500 to-green-700': player.color === 2,
+            'from-violet-500 to-violet-700': player.color === 3,
+          }"
+        ></div>
+      </div>
+    </div>
     <!-- map section -->
     <div id="map" class="flex justify-center items-center relative">
       <div v-for="(y, i) in map[game.level].x+2">
@@ -19,16 +59,15 @@
           class="cell relative size-16 box-border transition-all duration-500"
           :class="{
             // unreachable block and start after first move
-            'bg-stone-950 border-12 border-t-stone-800/60 border-l-stone-800/60 border-b-black border-r-black shadow-xl shadow-black/70 z-10': isBlocked(i, j) && !(isStart(i, j) && game.init),
+            'block z-10': isBlocked(i, j) && !(isStart(i, j) && game.init),
             // background like field
-            'bg-transparent !border-none': isBackground(i, j),
+            '!bg-transparent !border-none': isBackground(i, j),
             // lava trap
             'bg-lava animate-waft shadow-inner-lg shadow-black ': isTrap(i, j),
             // target and target glow
-            'bg-yellow-500 border-12 border-stone-900/90': isTarget(i, j),
-            'after:absolute after:size-full after:animate-glow': isTarget(i, j),
+            'bg-carbon after:bg-yellow-600 after:absolute after:top-3 after:left-3 after:size-10 after:animate-glow after:z-10 after:border-12 after:border-t-stone-800/30 after:border-l-stone-800/30 after:border-b-white/30 after:border-r-white/30 after:transition-all after:duration-500': isTarget(i, j),
             // target reached
-            'border-32': isTarget(i, j) && finished,
+            'bg-carbon after:size-0 after:border-0 after:top-8 after:left-8': isTarget(i, j) && finished,
             // normal ground
             'bg-carbon border border-stone-900/50': isGround(i, j) || (isStart(i, j) && game.init),
           }"
@@ -39,46 +78,18 @@
           <span v-if="debug" class="text-white">{{i}},{{j}}</span>
         </div>
       </div>
-      <div ref="ball" class="absolute size-16 transition-all">
-        <div
-          class="
-            absolute top-10 left-1/2 -translate-x-1/2 translate-y-1/4 size-10 rounded-full
-            bg-gradient-to-br from-rose-500 to-rose-700
-            animate-idle transition-all duration-300
-          "
-          :class="{ 'top-5 animate-none shadow !size-0 opacity-0': finished || trapped }"
-        ></div>
-      </div>
+      <ball ref="ball" :color="player.color" :exit="finished || trapped" />
     </div>
     <!-- dashboard -->
-    <div class="flex flex-col justify-center gap-8">
-      <div class="flex flex-col items-center text-rose-600">
-        <span class="text-3xl font-bungee">Lava</span>
-        <span class="text-6xl font-bungee leading-10">Ball</span>
-        <span>v{{ $version }}</span>
-      </div>
-      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
-        <div class="text-rose-600 text-center text-4xl font-bungee">
-          {{ t('level') }} {{ game.level }}
-        </div>
-        <div class="flex gap-2 justify-center text-rose-600">
-          <div class="text-4xl font-bungee">{{ player.steps }}</div>
-          <div class="uppercase tracking-widest">{{ t('steps') }}</div>
-        </div>
-        <button class="btn-block" @click="restart()">{{ t('restartLevel') }}</button>
-        <button class="btn-block" v-if="debug" @click="next">{{ t('nextLevel') }}</button>
-      </div>
-      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
-        <div class="text-rose-600 text-center text-4xl font-bungee">
-          {{ t('total') }}
-        </div>
-        <div class="flex gap-2 justify-center text-rose-600">
-          <div class="text-4xl font-bungee">{{ game.score }}</div>
-          <div class="uppercase tracking-widest">{{ t('points') }}</div>
-        </div>
-        <button class="btn-block" @click="reset">{{ t('newGame') }}</button>
-      </div>
-    </div>
+    <dashboard
+      :level="game.level"
+      :steps="player.steps"
+      :score="game.score"
+      :debug="debug"
+      @restart="restart()"
+      @next="next()"
+      @reset="reset(true, false, true)"
+    />
     <!-- modal -->
     <modal :active="game.finished">
       <div class="text-center">
@@ -115,7 +126,9 @@ import { reactive, ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import Modal from "@/components/Modal.vue";
-// import Player from "@/components/Player.vue";
+import Brand from "@/components/Brand.vue";
+import Ball from "@/components/Ball.vue";
+import Dashboard from "@/components/Dashboard.vue";
 import level from './level';
 
 const { t } = useI18n();
@@ -127,6 +140,7 @@ const map = level;
 const game = reactive({
   level: 1,
   init: true,
+  started: false,
   finished: false,
   score: 0,
 });
@@ -137,6 +151,7 @@ const player = reactive({
   x:0, y:0,
   active: true,
   steps: 0,
+  color: 1,
 });
 const ball = ref(null);
 
@@ -175,11 +190,16 @@ onMounted(() => {
   player.x = map[game.level].start.x;
   player.y = map[game.level].start.y;
   // initial position of player, one cell is 4x basic unit
-  ball.value.style.left = 4*player.x + 'rem';
-  ball.value.style.top = 4*player.y + 'rem';
+  ball.value.el.style.left = 4*player.x + 'rem';
+  ball.value.el.style.top = 4*player.y + 'rem';
   // set focus to game to handle key events
   board.value.focus();
 });
+
+const start = () => {
+  game.started = true;
+  board.value.focus();
+};
 
 // check if two given positions are equal
 const eq = (a,b) => {
@@ -261,8 +281,8 @@ const go = (x, y) => {
     player.x = x;
     player.y = y;
     player.steps++;
-    ball.value.style.left = 4*x + 'rem';
-    ball.value.style.top = 4*y + 'rem';
+    ball.value.el.style.left = 4*x + 'rem';
+    ball.value.el.style.top = 4*y + 'rem';
     // player dies if trapped, level restart by keeping score
     if (trapped.value) {
       setTimeout(() => restart(true, true), 1000);
@@ -300,11 +320,15 @@ const down = () => {
 const reset = () => {
   game.level = 1;
   game.score = 0;
+  game.started = false;
   restart();
 };
 // go to next level
 const next = () => {
-  if (!isLastLevel.value) {
+  if (!game.started) {
+    start();
+  }
+  if (!isLastLevel.value && finished.value || debug.value) {
     game.level++;
     restart();
   }

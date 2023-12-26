@@ -37,3 +37,7 @@
   background-size: 4rem 4rem;
   @apply bg-red-600;
 }
+
+.block {
+  @apply bg-stone-950 border-12 border-t-stone-800/60 border-l-stone-800/60 border-b-black border-r-black shadow-xl shadow-black/70;
+}

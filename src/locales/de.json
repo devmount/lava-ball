@@ -1,4 +1,5 @@
 {
+  "chooseColor": "Wähle eine Farbe",
   "gameFinished": "Spiel beendet!",
   "level": "Level",
   "levelCompleted": "Level {0} ageschlossen!",
@@ -6,6 +7,7 @@
   "nextLevel": "Nächstes Level",
   "points": "Punkte",
   "restartLevel": "Level neustarten",
+  "startGame": "Spiel starten",
   "steps": "Schritte",
   "total": "Gesamt",
   "youFinishedWithPoints": "Herzlichen Glückwunsch! Du hast das Spiel mit {0} Punkten abgeschlossen.",
