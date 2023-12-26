@@ -61,7 +61,7 @@
             // unreachable block and start after first move
             'block z-10': isBlocked(i, j) && !(isStart(i, j) && game.init),
             // background like field
-            'bg-transparent !border-none': isBackground(i, j),
+            '!bg-transparent !border-none': isBackground(i, j),
             // lava trap
             'bg-lava animate-waft shadow-inner-lg shadow-black ': isTrap(i, j),
             // target and target glow
@@ -325,7 +325,10 @@ const reset = () => {
 };
 // go to next level
 const next = () => {
-  if (!isLastLevel.value) {
+  if (!game.started) {
+    start();
+  }
+  if (!isLastLevel.value && finished.value || debug.value) {
     game.level++;
     restart();
   }
