@@ -42,34 +42,15 @@
       <ball ref="ball" :exit="finished || trapped" />
     </div>
     <!-- dashboard -->
-    <div class="flex flex-col justify-center gap-8">
-      <div class="flex flex-col items-center text-rose-600">
-        <span class="text-3xl font-bungee">Lava</span>
-        <span class="text-6xl font-bungee leading-10">Ball</span>
-        <span>v{{ $version }}</span>
-      </div>
-      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
-        <div class="text-rose-600 text-center text-4xl font-bungee">
-          {{ t('level') }} {{ game.level }}
-        </div>
-        <div class="flex gap-2 justify-center text-rose-600">
-          <div class="text-4xl font-bungee">{{ player.steps }}</div>
-          <div class="uppercase tracking-widest">{{ t('steps') }}</div>
-        </div>
-        <button class="btn-block" @click="restart()">{{ t('restartLevel') }}</button>
-        <button class="btn-block" v-if="debug" @click="next">{{ t('nextLevel') }}</button>
-      </div>
-      <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
-        <div class="text-rose-600 text-center text-4xl font-bungee">
-          {{ t('total') }}
-        </div>
-        <div class="flex gap-2 justify-center text-rose-600">
-          <div class="text-4xl font-bungee">{{ game.score }}</div>
-          <div class="uppercase tracking-widest">{{ t('points') }}</div>
-        </div>
-        <button class="btn-block" @click="reset">{{ t('newGame') }}</button>
-      </div>
-    </div>
+    <dashboard
+      :level="game.level"
+      :steps="player.steps"
+      :score="game.score"
+      :debug="debug"
+      @restart="restart()"
+      @next="next()"
+      @reset="reset()"
+    />
     <!-- modal -->
     <modal :active="game.finished">
       <div class="text-center">
@@ -107,6 +88,7 @@ import { useI18n } from 'vue-i18n';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import Modal from "@/components/Modal.vue";
 import Ball from "@/components/Ball.vue";
+import Dashboard from "@/components/Dashboard.vue";
 import level from './level';
 
 const { t } = useI18n();
