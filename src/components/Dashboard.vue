@@ -1,10 +1,6 @@
 <template>
   <div class="flex flex-col justify-center gap-8">
-    <div class="flex flex-col items-center text-rose-600">
-      <span class="text-3xl font-bungee">Lava</span>
-      <span class="text-6xl font-bungee leading-10">Ball</span>
-      <span>v{{ $version }}</span>
-    </div>
+    <brand />
     <div class="flex flex-col gap-4 p-8 text-center block">
       <div class="text-rose-600 text-center text-4xl font-bungee">
         {{ t('level') }} {{ level }}
@@ -41,6 +37,7 @@
 
 <script setup>
 import { useI18n } from 'vue-i18n';
+import Brand from "@/components/Brand.vue";
 const { t } = useI18n();
 
 defineProps(['level', 'steps', 'score', 'debug']);

@@ -15,10 +15,11 @@
     class="relative bg-black w-screen h-screen flex justify-center items-center gap-20"
   >
     <!-- start section -->
-    <div v-if="!game.started" class="absolute z-50 size-full bg-black flex justify-center items-center">
+    <div v-if="!game.started" class="absolute z-50 size-full bg-black flex flex-col justify-center items-center gap-8">
+      <brand />
       <div class="block w-1/2 p-16 flex justify-center items-center gap-16">
         <div class="flex flex-col gap-8">
-          <div class="text-rose-600 text-4xl font-bungee">{{ t('chooseColor') }}</div>
+          <div class="text-stone-600 text-4xl font-bungee">{{ t('chooseColor') }}</div>
           <div class="flex justify-center items-center gap-4">
             <div
               class="cursor-pointer transition-all size-10 border-4 border-rose-700 bg-rose-500"
@@ -125,6 +126,7 @@ import { reactive, ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import Modal from "@/components/Modal.vue";
+import Brand from "@/components/Brand.vue";
 import Ball from "@/components/Ball.vue";
 import Dashboard from "@/components/Dashboard.vue";
 import level from './level';
