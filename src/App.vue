@@ -1,7 +1,7 @@
 <template>
   <div
     id="app"
-    ref="game"
+    ref="board"
     tabindex="0"
     @keydown.left="left"
     @keydown.right="right"
@@ -39,7 +39,7 @@
           <span v-if="debug" class="text-white">{{i}},{{j}}</span>
         </div>
       </div>
-      <div ref="player" class="absolute size-16 transition-all">
+      <div ref="ball" class="absolute size-16 transition-all">
         <div
           class="
             absolute top-10 left-1/2 -translate-x-1/2 translate-y-1/4 size-10 rounded-full
@@ -59,43 +59,43 @@
       </div>
       <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
         <div class="text-rose-600 text-center text-4xl font-bungee">
-          Level {{ game.level }}
+          {{ t('level') }} {{ game.level }}
         </div>
         <div class="flex gap-2 justify-center text-rose-600">
           <div class="text-4xl font-bungee">{{ player.steps }}</div>
-          <div class="uppercase tracking-widest">steps</div>
+          <div class="uppercase tracking-widest">{{ t('steps') }}</div>
         </div>
-        <button class="btn-block" @click="restart()">Restart Level</button>
-        <button class="btn-block" v-if="debug" @click="next">Next Level</button>
+        <button class="btn-block" @click="restart()">{{ t('restartLevel') }}</button>
+        <button class="btn-block" v-if="debug" @click="next">{{ t('nextLevel') }}</button>
       </div>
       <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
         <div class="text-rose-600 text-center text-4xl font-bungee">
-          Total
+          {{ t('total') }}
         </div>
         <div class="flex gap-2 justify-center text-rose-600">
           <div class="text-4xl font-bungee">{{ game.score }}</div>
-          <div class="uppercase tracking-widest">points</div>
+          <div class="uppercase tracking-widest">{{ t('points') }}</div>
         </div>
-        <button class="btn-block" @click="reset">New Game</button>
+        <button class="btn-block" @click="reset">{{ t('newGame') }}</button>
       </div>
     </div>
     <!-- modal -->
     <modal :active="game.finished">
       <div class="text-center">
         <div v-if="!isLastLevel" class="text-5xl font-bungee">
-          Level {{ game.level }} completed!
+          {{ t('levelCompleted', [game.level]) }}
         </div>
         <div v-else class="text-5xl font-bungee">
-          Game finished!
+          {{ t('gameFinished') }}
         </div>
         <div>
-          <p v-if="!isLastLevel">You currently have {{ game.score }} points.</p>
-          <p v-else>Congratulations! You finished the game with {{ game.score }} points.</p>
+          <p v-if="!isLastLevel">{{ t('youHavePoints', [game.score]) }}</p>
+          <p v-else>{{ t('youFinishedWithPoints', [game.score]) }}</p>
         </div>
         <div class="mt-8">
-          <button class="mr-4" @click="restart(false)">Restart Level</button>
-          <button-primary v-if="!isLastLevel" @click="next">Next Level</button-primary>
-          <button-primary v-else @click="reset">New Game</button-primary>
+          <button class="mr-4" @click="restart(false)">{{ t('restartLevel') }}</button>
+          <button-primary v-if="!isLastLevel" @click="next">{{ t('nextLevel') }}</button-primary>
+          <button-primary v-else @click="reset">{{ t('newGame') }}</button-primary>
         </div>
       </div>
     </modal>
@@ -110,196 +110,203 @@
   </div>
 </template>
 
-<script>
-import { defineComponent } from 'vue';
+<script setup>
+import { reactive, ref, onMounted, computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import Modal from "@/components/Modal.vue";
 // import Player from "@/components/Player.vue";
 import level from './level';
 
-export default defineComponent({
-  name: 'App',
-  components: {
-    ButtonPrimary,
-    Modal,
-    // Player,
-  },
-  data () {
-    return {
-      // fixed map configuration per level
-      map: level,
-      // game configuration
-      game: {
-        level: 1,
-        init: true,
-        finished: false,
-        score: 0,
-      },
-      // player configuration
-      player: {
-        x:0, y:0,
-        active: true,
-        steps: 0,
-      },
-      // for development
-      debug: false
-    }
-  },
-  mounted () {
-    this.player.x = this.map[this.game.level].start.x
-    this.player.y = this.map[this.game.level].start.y
-    // initial position of player, one cell is 4x basic unit
-    this.$refs.player.style.left = 4*this.player.x + 'rem'
-    this.$refs.player.style.top = 4*this.player.y + 'rem'
-    // set focus to game to handle key events
-    this.$refs.game.focus()
-  },
-  methods: {
-    // check if given cell is blocked (not accessible by player)
-    isBlocked (x, y) {
-      if (x==0 || y==0 || x==this.map[this.game.level].x+1 || y==this.map[this.game.level].y+1) {
-        return true
-      }
-      for (let i = 0; i < this.map[this.game.level].blocked.length; i++) {
-        const block = this.map[this.game.level].blocked[i]
-        if (this.eq(block, {x:x,y:y})) {
-          return true
-        }
-      }
-      return false
-    },
-    // check if cell is background cell (not functional and not accessible due to completely surrounded by blocked cells)
-    isBackground (x, y) {
-      for (let i = 0; i < this.map[this.game.level].background.length; i++) {
-        const b = this.map[this.game.level].background[i]
-        if (this.eq(b, {x:x,y:y})) {
-          return true
-        }
-      }
-      return false
-    },
-    // check if given cell is a trap (player dies)
-    isTrap (x, y) {
-      for (let i = 0; i < this.map[this.game.level].trap.length; i++) {
-        const trap = this.map[this.game.level].trap[i]
-        if (this.eq(trap, {x:x,y:y})) {
-          return true
-        }
-      }
-      return false
-    },
-    // check if cell is level start
-    isStart (x, y) {
-      return this.eq(this.map[this.game.level].start, {x:x,y:y})
-    },
-    // check if cell is level goal
-    isTarget (x, y) {
-      return this.eq(this.map[this.game.level].target, {x:x,y:y})
-    },
-    // check if cell is normal ground
-    isGround (x, y) {
-      return !this.isBlocked(x, y) && !this.isBackground(x, y) && !this.isTrap(x, y) && !this.isTarget(x, y);
-    },
-    // move player to given position, if game isn't already finished
-    go (x, y) {
-      // only move player if game is not finished
-      if (!this.finished && !this.trapped) {
-        this.game.init = false
-        this.player.x = x
-        this.player.y = y
-        this.player.steps++
-        this.$refs.player.style.left = 4*x + 'rem'
-        this.$refs.player.style.top = 4*y + 'rem'
-        // player dies if trapped, level restart by keeping score
-        if (this.trapped) {
-          let self = this
-          setTimeout(function(){ self.restart(true, true) }, 1000)
-        }
-      }
-    },
-    // move player one cell left
-    left () {
-      if (!this.isBlocked(this.player.x-1, this.player.y) && this.player.x > 0) {
-        this.go(this.player.x-1, this.player.y)
-      }
-    },
-    // move player one cell right
-    right () {
-      if (!this.isBlocked(this.player.x+1, this.player.y) && this.player.x < this.map[this.game.level].x) {
-        this.go(this.player.x+1, this.player.y)
-      }
-    },
-    // move player one cell up
-    up () {
-      if (!this.isBlocked(this.player.x, this.player.y-1) && this.player.y > 0) {
-        this.go(this.player.x, this.player.y-1)
-      }
-    },
-    // move player one cell down
-    down () {
-      if (!this.isBlocked(this.player.x, this.player.y+1) && this.player.y < this.map[this.game.level].y) {
-        this.go(this.player.x, this.player.y+1)
-      }
-    },
-    // restart level by setting player position to start and initialize level
-    restart (keepGameScore=true, keepLevelScore=false) {
-      this.player.x = this.map[this.game.level].start.x
-      this.player.y = this.map[this.game.level].start.y
-      if (!keepGameScore) {
-        this.game.score -= this.player.steps
-      }
-      if (!keepLevelScore) {
-        this.player.steps = -1
-      }
-      this.go(this.player.x, this.player.y)
-      this.game.init = true
-      this.game.finished = false
-      this.$refs.game.focus()
-    },
-    // reset game and start on level 1
-    reset () {
-      this.game.level = 1
-      this.game.score = 0
-      this.restart()
-    },
-    // go to next level
-    next () {
-      if (!this.isLastLevel) {
-        this.game.level++
-        this.restart()
-      }
-    },
-    // check if two given positions are equal
-    eq (a,b) {
-      return (a.x == b.x && a.y == b.y)
-    }
-  },
-  computed: {
-    // calculate if game is finished (player reached goal)
-    finished () {
-      if (this.eq(this.map[this.game.level].target, this.player)) {
-        this.game.score += this.player.steps
-        let self = this
-        setTimeout(function(){ self.game.finished = true}, 1500)
-        return true
-      } else {
-        return false
-      }
-    },
-    // calculate if player is trapped (player dies, level restarts)
-    trapped () {
-      let trapped = false
-      this.map[this.game.level].trap.forEach(t => {
-        if (this.eq(t, this.player)) {
-          trapped = true
-        }
-      })
-      return trapped
-    },
-    // calculate if current level is the last one
-    isLastLevel () {
-      return this.game.level == Object.keys(this.map).length
-    },
+const { t } = useI18n();
+
+// fixed map configuration per level
+const map = level;
+
+// game configuration
+const game = reactive({
+  level: 1,
+  init: true,
+  finished: false,
+  score: 0,
+});
+const board = ref(null);
+
+// player configuration
+const player = reactive({
+  x:0, y:0,
+  active: true,
+  steps: 0,
+});
+const ball = ref(null);
+
+// for development
+const debug = ref(false);
+
+
+// calculate if game is finished (player reached goal)
+const finished = computed(() => {
+  if (eq(map[game.level].target, player)) {
+    game.score += player.steps;
+    setTimeout(() => game.finished = true, 1500);
+    return true;
+  } else {
+    return false;
   }
 });
+
+// calculate if player is trapped (player dies, level restarts)
+const trapped = computed(() => {
+  let trapped = false;
+  map[game.level].trap.forEach(t => {
+    if (eq(t, player)) {
+      trapped = true;
+    }
+  });
+  return trapped;
+});
+
+// calculate if current level is the last one
+const isLastLevel = computed(() => {
+  return game.level == Object.keys(map).length;
+});
+
+onMounted(() => {
+  player.x = map[game.level].start.x;
+  player.y = map[game.level].start.y;
+  // initial position of player, one cell is 4x basic unit
+  ball.value.style.left = 4*player.x + 'rem';
+  ball.value.style.top = 4*player.y + 'rem';
+  // set focus to game to handle key events
+  board.value.focus();
+});
+
+// check if two given positions are equal
+const eq = (a,b) => {
+  return (a.x == b.x && a.y == b.y);
+};
+
+// check if given cell is blocked (not accessible by player)
+const isBlocked = (x, y) => {
+  if (x==0 || y==0 || x==map[game.level].x+1 || y==map[game.level].y+1) {
+    return true;
+  }
+  for (let i = 0; i < map[game.level].blocked.length; i++) {
+    const block = map[game.level].blocked[i];
+    if (eq(block, {x:x,y:y})) {
+      return true;
+    }
+  }
+  return false;
+};
+
+// check if cell is background cell (not functional and not accessible due to completely surrounded by blocked cells)
+const isBackground = (x, y) => {
+  for (let i = 0; i < map[game.level].background.length; i++) {
+    const b = map[game.level].background[i];
+    if (eq(b, {x:x,y:y})) {
+      return true;
+    }
+  }
+  return false;
+};
+
+// check if given cell is a trap (player dies)
+const isTrap = (x, y) => {
+  for (let i = 0; i < map[game.level].trap.length; i++) {
+    const trap = map[game.level].trap[i];
+    if (eq(trap, {x:x,y:y})) {
+      return true;
+    }
+  }
+  return false;
+};
+
+// check if cell is level start
+const isStart = (x, y) => {
+  return eq(map[game.level].start, {x:x,y:y});
+};
+
+// check if cell is level goal
+const isTarget = (x, y) => {
+  return eq(map[game.level].target, {x:x,y:y});
+};
+
+// check if cell is normal ground
+const isGround = (x, y) => {
+  return !isBlocked(x, y) && !isBackground(x, y) && !isTrap(x, y) && !isTarget(x, y);
+};
+
+// restart level by setting player position to start and initialize level
+const restart = (keepGameScore=true, keepLevelScore=false) => {
+  player.x = map[game.level].start.x;
+  player.y = map[game.level].start.y;
+  if (!keepGameScore) {
+    game.score -= player.steps;
+  }
+  if (!keepLevelScore) {
+    player.steps = -1;
+  }
+  go(player.x, player.y)
+  game.init = true;
+  game.finished = false;
+  board.value.focus();
+};
+
+// move player to given position, if game isn't already finished
+const go = (x, y) => {
+  // only move player if game is not finished
+  if (!finished.value && !trapped.value) {
+    game.init = false;
+    player.x = x;
+    player.y = y;
+    player.steps++;
+    ball.value.style.left = 4*x + 'rem';
+    ball.value.style.top = 4*y + 'rem';
+    // player dies if trapped, level restart by keeping score
+    if (trapped.value) {
+      setTimeout(() => restart(true, true), 1000);
+    }
+  }
+};
+
+// move player one cell left
+const left = () => {
+  if (!isBlocked(player.x-1, player.y) && player.x > 0) {
+    go(player.x-1, player.y);
+  }
+};
+// move player one cell right
+const right = () => {
+  if (!isBlocked(player.x+1, player.y) && player.x < map[game.level].x) {
+    go(player.x+1, player.y);
+  }
+};
+// move player one cell up
+const up = () => {
+  if (!isBlocked(player.x, player.y-1) && player.y > 0) {
+    go(player.x, player.y-1);
+  }
+};
+// move player one cell down
+const down = () => {
+  if (!isBlocked(player.x, player.y+1) && player.y < map[game.level].y) {
+    go(player.x, player.y+1);
+  }
+};
+
+
+// reset game and start on level 1
+const reset = () => {
+  game.level = 1;
+  game.score = 0;
+  restart();
+};
+// go to next level
+const next = () => {
+  if (!isLastLevel.value) {
+    game.level++;
+    restart();
+  }
+};
 </script>

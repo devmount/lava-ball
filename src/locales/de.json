@@ -1,0 +1,13 @@
+{
+  "gameFinished": "Spiel beendet!",
+  "level": "Level",
+  "levelCompleted": "Level {0} ageschlossen!",
+  "newGame": "Neues Spiel",
+  "nextLevel": "Nächstes Level",
+  "points": "Punkte",
+  "restartLevel": "Level neustarten",
+  "steps": "Schritte",
+  "total": "Gesamt",
+  "youFinishedWithPoints": "Herzlichen Glückwunsch! Du hast das Spiel mit {0} Punkten abgeschlossen.",
+  "youHavePoints": "Du hast aktuell {0} Punkte."
+}

@@ -1,0 +1,13 @@
+{
+  "gameFinished": "Game finished!",
+  "level": "Level",
+  "levelCompleted": "Level {0} competed!",
+  "newGame": "New Game",
+  "nextLevel": "Next Level",
+  "points": "Points",
+  "restartLevel": "Restart Level",
+  "steps": "Steps",
+  "total": "Total",
+  "youFinishedWithPoints": "Congratulation! You finished the game with {0} points.",
+  "youHavePoints": "You currently have {0} points."
+}
