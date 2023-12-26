@@ -1,6 +1,8 @@
 {
   "gameFinished": "Game finished!",
+  "startGame": "Start Game",
   "level": "Level",
+  "chooseColor": "Choose a color",
   "levelCompleted": "Level {0} competed!",
   "newGame": "New Game",
   "nextLevel": "Next Level",

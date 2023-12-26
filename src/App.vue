@@ -9,8 +9,47 @@
     @keydown.down="down"
     @keydown.escape="restart"
     @keydown.enter="next"
+    @keydown.1="player.color = 1"
+    @keydown.2="player.color = 2"
+    @keydown.3="player.color = 3"
     class="relative bg-black w-screen h-screen flex justify-center items-center gap-20"
   >
+    <!-- start section -->
+    <div v-if="!game.started" class="absolute z-50 size-full bg-black flex justify-center items-center">
+      <div class="block w-1/2 p-16 flex justify-center items-center gap-16">
+        <div class="flex flex-col gap-8">
+          <div class="text-rose-600 text-4xl font-bungee">{{ t('chooseColor') }}</div>
+          <div class="flex justify-center items-center gap-4">
+            <div
+              class="cursor-pointer transition-all size-10 border-4 border-rose-700 bg-rose-500"
+              :class="{ 'outline outline-8 outline-stone-800': player.color === 1 }"
+              @click="player.color = 1"
+            ></div>
+            <div
+              class="cursor-pointer transition-all size-10 border-4 border-green-700 bg-green-500"
+              :class="{ 'outline outline-8 outline-stone-800': player.color === 2 }"
+              @click="player.color = 2"
+            ></div>
+            <div
+              class="cursor-pointer transition-all size-10 border-4 border-violet-700 bg-violet-500"
+              :class="{ 'outline outline-8 outline-stone-800': player.color === 3 }"
+              @click="player.color = 3"
+            ></div>
+            <button @click="start()" class="ml-4">
+              {{ t('startGame') }}
+            </button>
+          </div>
+        </div>
+        <div
+          class="size-44 shrink-0 rounded-full bg-gradient-to-br animate-bounce"
+          :class="{
+            'from-rose-500 to-rose-700': player.color === 1,
+            'from-green-500 to-green-700': player.color === 2,
+            'from-violet-500 to-violet-700': player.color === 3,
+          }"
+        ></div>
+      </div>
+    </div>
     <!-- map section -->
     <div id="map" class="flex justify-center items-center relative">
       <div v-for="(y, i) in map[game.level].x+2">
@@ -19,16 +58,15 @@
           class="cell relative size-16 box-border transition-all duration-500"
           :class="{
             // unreachable block and start after first move
-            'bg-stone-950 border-12 border-t-stone-800/60 border-l-stone-800/60 border-b-black border-r-black shadow-xl shadow-black/70 z-10': isBlocked(i, j) && !(isStart(i, j) && game.init),
+            'block z-10': isBlocked(i, j) && !(isStart(i, j) && game.init),
             // background like field
             'bg-transparent !border-none': isBackground(i, j),
             // lava trap
             'bg-lava animate-waft shadow-inner-lg shadow-black ': isTrap(i, j),
             // target and target glow
-            'bg-yellow-500 border-12 border-stone-900/90': isTarget(i, j),
-            'after:absolute after:size-full after:animate-glow': isTarget(i, j),
+            'bg-carbon after:bg-yellow-600 after:absolute after:top-3 after:left-3 after:size-10 after:animate-glow after:z-10 after:border-12 after:border-t-stone-800/30 after:border-l-stone-800/30 after:border-b-white/30 after:border-r-white/30 after:transition-all after:duration-500': isTarget(i, j),
             // target reached
-            'border-32': isTarget(i, j) && finished,
+            'bg-carbon after:size-0 after:border-0 after:top-8 after:left-8': isTarget(i, j) && finished,
             // normal ground
             'bg-carbon border border-stone-900/50': isGround(i, j) || (isStart(i, j) && game.init),
           }"
@@ -39,7 +77,7 @@
           <span v-if="debug" class="text-white">{{i}},{{j}}</span>
         </div>
       </div>
-      <ball ref="ball" :exit="finished || trapped" />
+      <ball ref="ball" :color="player.color" :exit="finished || trapped" />
     </div>
     <!-- dashboard -->
     <dashboard
@@ -49,7 +87,7 @@
       :debug="debug"
       @restart="restart()"
       @next="next()"
-      @reset="reset()"
+      @reset="reset(true, false, true)"
     />
     <!-- modal -->
     <modal :active="game.finished">
@@ -100,6 +138,7 @@ const map = level;
 const game = reactive({
   level: 1,
   init: true,
+  started: false,
   finished: false,
   score: 0,
 });
@@ -110,6 +149,7 @@ const player = reactive({
   x:0, y:0,
   active: true,
   steps: 0,
+  color: 1,
 });
 const ball = ref(null);
 
@@ -153,6 +193,11 @@ onMounted(() => {
   // set focus to game to handle key events
   board.value.focus();
 });
+
+const start = () => {
+  game.started = true;
+  board.value.focus();
+};
 
 // check if two given positions are equal
 const eq = (a,b) => {
@@ -273,6 +318,7 @@ const down = () => {
 const reset = () => {
   game.level = 1;
   game.score = 0;
+  game.started = false;
   restart();
 };
 // go to next level

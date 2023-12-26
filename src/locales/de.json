@@ -1,6 +1,8 @@
 {
   "gameFinished": "Spiel beendet!",
+  "startGame": "Spiel starten",
   "level": "Level",
+  "chooseColor": "Wähle eine Farbe",
   "levelCompleted": "Level {0} ageschlossen!",
   "newGame": "Neues Spiel",
   "nextLevel": "Nächstes Level",

@@ -5,7 +5,7 @@
       <span class="text-6xl font-bungee leading-10">Ball</span>
       <span>v{{ $version }}</span>
     </div>
-    <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
+    <div class="flex flex-col gap-4 p-8 text-center block">
       <div class="text-rose-600 text-center text-4xl font-bungee">
         {{ t('level') }} {{ level }}
       </div>
@@ -24,7 +24,7 @@
         {{ t('nextLevel') }}
       </button>
     </div>
-    <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
+    <div class="flex flex-col gap-4 p-8 text-center block">
       <div class="text-rose-600 text-center text-4xl font-bungee">
         {{ t('total') }}
       </div>
