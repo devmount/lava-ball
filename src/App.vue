@@ -59,43 +59,43 @@
       </div>
       <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
         <div class="text-rose-600 text-center text-4xl font-bungee">
-          Level {{ game.level }}
+          {{ t('level') }} {{ game.level }}
         </div>
         <div class="flex gap-2 justify-center text-rose-600">
           <div class="text-4xl font-bungee">{{ player.steps }}</div>
-          <div class="uppercase tracking-widest">steps</div>
+          <div class="uppercase tracking-widest">{{ t('steps') }}</div>
         </div>
-        <button class="btn-block" @click="restart()">Restart Level</button>
-        <button class="btn-block" v-if="debug" @click="next">Next Level</button>
+        <button class="btn-block" @click="restart()">{{ t('restartLevel') }}</button>
+        <button class="btn-block" v-if="debug" @click="next">{{ t('nextLevel') }}</button>
       </div>
       <div class="flex flex-col gap-4 p-8 bg-stone-900 text-center rounded">
         <div class="text-rose-600 text-center text-4xl font-bungee">
-          Total
+          {{ t('total') }}
         </div>
         <div class="flex gap-2 justify-center text-rose-600">
           <div class="text-4xl font-bungee">{{ game.score }}</div>
-          <div class="uppercase tracking-widest">points</div>
+          <div class="uppercase tracking-widest">{{ t('points') }}</div>
         </div>
-        <button class="btn-block" @click="reset">New Game</button>
+        <button class="btn-block" @click="reset">{{ t('newGame') }}</button>
       </div>
     </div>
     <!-- modal -->
     <modal :active="game.finished">
       <div class="text-center">
         <div v-if="!isLastLevel" class="text-5xl font-bungee">
-          Level {{ game.level }} completed!
+          {{ t('levelCompleted', [game.level]) }}
         </div>
         <div v-else class="text-5xl font-bungee">
-          Game finished!
+          {{ t('gameFinished') }}
         </div>
         <div>
-          <p v-if="!isLastLevel">You currently have {{ game.score }} points.</p>
-          <p v-else>Congratulations! You finished the game with {{ game.score }} points.</p>
+          <p v-if="!isLastLevel">{{ t('youHavePoints', [game.score]) }}</p>
+          <p v-else>{{ t('youFinishedWithPoints', [game.score]) }}</p>
         </div>
         <div class="mt-8">
-          <button class="mr-4" @click="restart(false)">Restart Level</button>
-          <button-primary v-if="!isLastLevel" @click="next">Next Level</button-primary>
-          <button-primary v-else @click="reset">New Game</button-primary>
+          <button class="mr-4" @click="restart(false)">{{ t('restartLevel') }}</button>
+          <button-primary v-if="!isLastLevel" @click="next">{{ t('nextLevel') }}</button-primary>
+          <button-primary v-else @click="reset">{{ t('newGame') }}</button-primary>
         </div>
       </div>
     </modal>
