@@ -67,7 +67,7 @@
             // target and target glow
             'bg-carbon after:bg-yellow-600 after:absolute after:top-3 after:left-3 after:size-10 after:animate-glow after:z-10 after:border-12 after:border-t-stone-800/30 after:border-l-stone-800/30 after:border-b-white/30 after:border-r-white/30 after:transition-all after:duration-500': isTarget(i, j),
             // target reached
-            'bg-carbon after:size-0 after:border-0 after:top-8 after:left-8': isTarget(i, j) && finished,
+            'bg-carbon after:!size-0 after:!border-0 after:top-8 after:left-8': isTarget(i, j) && finished,
             // normal ground
             'bg-carbon border border-stone-900/50': isGround(i, j) || (isStart(i, j) && game.init),
           }"
