@@ -39,16 +39,7 @@
           <span v-if="debug" class="text-white">{{i}},{{j}}</span>
         </div>
       </div>
-      <div ref="ball" class="absolute size-16 transition-all">
-        <div
-          class="
-            absolute top-10 left-1/2 -translate-x-1/2 translate-y-1/4 size-10 rounded-full
-            bg-gradient-to-br from-rose-500 to-rose-700
-            animate-idle transition-all duration-300
-          "
-          :class="{ 'top-5 animate-none shadow !size-0 opacity-0': finished || trapped }"
-        ></div>
-      </div>
+      <ball ref="ball" :exit="finished || trapped" />
     </div>
     <!-- dashboard -->
     <div class="flex flex-col justify-center gap-8">
@@ -115,7 +106,7 @@ import { reactive, ref, onMounted, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import Modal from "@/components/Modal.vue";
-// import Player from "@/components/Player.vue";
+import Ball from "@/components/Ball.vue";
 import level from './level';
 
 const { t } = useI18n();
@@ -175,8 +166,8 @@ onMounted(() => {
   player.x = map[game.level].start.x;
   player.y = map[game.level].start.y;
   // initial position of player, one cell is 4x basic unit
-  ball.value.style.left = 4*player.x + 'rem';
-  ball.value.style.top = 4*player.y + 'rem';
+  ball.value.el.style.left = 4*player.x + 'rem';
+  ball.value.el.style.top = 4*player.y + 'rem';
   // set focus to game to handle key events
   board.value.focus();
 });
@@ -261,8 +252,8 @@ const go = (x, y) => {
     player.x = x;
     player.y = y;
     player.steps++;
-    ball.value.style.left = 4*x + 'rem';
-    ball.value.style.top = 4*y + 'rem';
+    ball.value.el.style.left = 4*x + 'rem';
+    ball.value.el.style.top = 4*y + 'rem';
     // player dies if trapped, level restart by keeping score
     if (trapped.value) {
       setTimeout(() => restart(true, true), 1000);
