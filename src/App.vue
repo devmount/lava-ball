@@ -15,7 +15,10 @@
     class="relative bg-black w-screen h-screen flex justify-center items-center gap-20"
   >
     <!-- start section -->
-    <div v-if="!game.started" class="absolute z-50 size-full bg-black flex flex-col justify-center items-center gap-8">
+    <div
+      v-if="!game.started"
+      class="absolute z-50 size-full bg-black flex flex-col justify-center items-center gap-8"
+    >
       <brand />
       <div class="block w-1/2 p-16 flex justify-center items-center gap-16">
         <div class="flex flex-col gap-8">
@@ -53,43 +56,35 @@
     </div>
     <!-- map section -->
     <div id="map" class="flex justify-center items-center relative">
-      <div v-for="(y, i) in map[game.level].x+2">
+      <div v-for="(_, x) in map[game.level].size[0]+2">
         <div
-          v-for="(x, j) in map[game.level].y+2"
+          v-for="(_, y) in map[game.level].size[1]+2"
           class="cell relative size-16 box-border transition-all duration-500"
           :class="{
             // unreachable block and start after first move
-            'block z-10': isBlocked(i, j) && !(isStart(i, j) && game.init),
+            'block z-10': isBlocked(x, y) && !(isStart(x, y) && game.init),
             // background like field
-            '!bg-transparent !border-none': isBackground(i, j),
+            '!bg-transparent !border-none': isBackground(x, y),
             // lava trap
-            'bg-lava animate-waft shadow-inner-lg shadow-black ': isTrap(i, j),
+            'bg-lava animate-waft shadow-inner-lg shadow-black ': isTrap(x, y),
             // target and target glow
-            'bg-carbon after:bg-yellow-600 after:absolute after:top-3 after:left-3 after:size-10 after:animate-glow after:z-10 after:border-12 after:border-t-stone-800/30 after:border-l-stone-800/30 after:border-b-white/30 after:border-r-white/30 after:transition-all after:duration-500': isTarget(i, j),
+            'bg-carbon gold': isTarget(x, y),
             // target reached
-            'bg-carbon after:!size-0 after:!border-0 after:top-8 after:left-8': isTarget(i, j) && finished,
+            'bg-carbon after:!size-0 after:!border-0 after:top-8 after:left-8': isTarget(x, y) && finished,
             // normal ground
-            'bg-carbon border border-stone-900/50': isGround(i, j) || (isStart(i, j) && game.init),
+            'bg-carbon border border-stone-900/50': isGround(x, y) || (isStart(x, y) && game.init),
           }"
           :style="{
-            animationDelay: '-' + Math.floor((j+i) * 500) + 'ms'
+            animationDelay: '-' + Math.floor((y+x) * 500) + 'ms'
           }"
         >
-          <span v-if="debug" class="text-white">{{i}},{{j}}</span>
+          <span v-if="debug" class="text-white">{{x}},{{y}}</span>
         </div>
       </div>
       <ball ref="ball" :color="player.color" :exit="finished || trapped" />
     </div>
     <!-- dashboard -->
-    <dashboard
-      :level="game.level"
-      :steps="player.steps"
-      :score="game.score"
-      :debug="debug"
-      @restart="restart()"
-      @next="next()"
-      @reset="reset(true, false, true)"
-    />
+    <dashboard :level="game.level" :steps="player.steps" :score="game.score" :debug="debug" />
     <!-- modal -->
     <modal :active="game.finished">
       <div class="text-center">
@@ -122,7 +117,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, computed } from 'vue';
+import { reactive, ref, onMounted, computed, provide } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import Modal from "@/components/Modal.vue";
@@ -148,7 +143,8 @@ const board = ref(null);
 
 // player configuration
 const player = reactive({
-  x:0, y:0,
+  x:0,
+  y:0,
   active: true,
   steps: 0,
   color: 1,
@@ -158,10 +154,14 @@ const ball = ref(null);
 // for development
 const debug = ref(false);
 
+// check if two given positions are equal
+const eq = (a,b) => {
+  return (a[0] == b[0] && a[1] == b[1]);
+};
 
 // calculate if game is finished (player reached goal)
 const finished = computed(() => {
-  if (eq(map[game.level].target, player)) {
+  if (eq(map[game.level].target, [player.x, player.y])) {
     game.score += player.steps;
     setTimeout(() => game.finished = true, 1500);
     return true;
@@ -187,8 +187,8 @@ const isLastLevel = computed(() => {
 });
 
 onMounted(() => {
-  player.x = map[game.level].start.x;
-  player.y = map[game.level].start.y;
+  player.x = map[game.level].start[0];
+  player.y = map[game.level].start[1];
   // initial position of player, one cell is 4x basic unit
   ball.value.el.style.left = 4*player.x + 'rem';
   ball.value.el.style.top = 4*player.y + 'rem';
@@ -201,30 +201,26 @@ const start = () => {
   board.value.focus();
 };
 
-// check if two given positions are equal
-const eq = (a,b) => {
-  return (a.x == b.x && a.y == b.y);
-};
-
 // check if given cell is blocked (not accessible by player)
 const isBlocked = (x, y) => {
-  if (x==0 || y==0 || x==map[game.level].x+1 || y==map[game.level].y+1) {
+  if (x==0 || y==0 || x==map[game.level].size[0]+1 || y==map[game.level].size[1]+1) {
     return true;
   }
   for (let i = 0; i < map[game.level].blocked.length; i++) {
     const block = map[game.level].blocked[i];
-    if (eq(block, {x:x,y:y})) {
+    if (eq(block, [x,y])) {
       return true;
     }
   }
   return false;
 };
 
-// check if cell is background cell (not functional and not accessible due to completely surrounded by blocked cells)
+// check if cell is background cell
+// (not functional and not accessible due to completely surrounded by blocked cells)
 const isBackground = (x, y) => {
   for (let i = 0; i < map[game.level].background.length; i++) {
     const b = map[game.level].background[i];
-    if (eq(b, {x:x,y:y})) {
+    if (eq(b, [x,y])) {
       return true;
     }
   }
@@ -235,7 +231,7 @@ const isBackground = (x, y) => {
 const isTrap = (x, y) => {
   for (let i = 0; i < map[game.level].trap.length; i++) {
     const trap = map[game.level].trap[i];
-    if (eq(trap, {x:x,y:y})) {
+    if (eq(trap, [x,y])) {
       return true;
     }
   }
@@ -244,12 +240,12 @@ const isTrap = (x, y) => {
 
 // check if cell is level start
 const isStart = (x, y) => {
-  return eq(map[game.level].start, {x:x,y:y});
+  return eq(map[game.level].start, [x,y]);
 };
 
 // check if cell is level goal
 const isTarget = (x, y) => {
-  return eq(map[game.level].target, {x:x,y:y});
+  return eq(map[game.level].target, [x,y]);
 };
 
 // check if cell is normal ground
@@ -259,8 +255,8 @@ const isGround = (x, y) => {
 
 // restart level by setting player position to start and initialize level
 const restart = (keepGameScore=true, keepLevelScore=false) => {
-  player.x = map[game.level].start.x;
-  player.y = map[game.level].start.y;
+  player.x = map[game.level].start[0];
+  player.y = map[game.level].start[1];
   if (!keepGameScore) {
     game.score -= player.steps;
   }
@@ -272,6 +268,7 @@ const restart = (keepGameScore=true, keepLevelScore=false) => {
   game.finished = false;
   board.value.focus();
 };
+provide('restart', restart);
 
 // move player to given position, if game isn't already finished
 const go = (x, y) => {
@@ -298,7 +295,7 @@ const left = () => {
 };
 // move player one cell right
 const right = () => {
-  if (!isBlocked(player.x+1, player.y) && player.x < map[game.level].x) {
+  if (!isBlocked(player.x+1, player.y) && player.x < map[game.level].size[0]) {
     go(player.x+1, player.y);
   }
 };
@@ -310,7 +307,7 @@ const up = () => {
 };
 // move player one cell down
 const down = () => {
-  if (!isBlocked(player.x, player.y+1) && player.y < map[game.level].y) {
+  if (!isBlocked(player.x, player.y+1) && player.y < map[game.level].size[1]) {
     go(player.x, player.y+1);
   }
 };
@@ -323,6 +320,8 @@ const reset = () => {
   game.started = false;
   restart();
 };
+provide('reset', reset);
+
 // go to next level
 const next = () => {
   if (!game.started) {
@@ -333,4 +332,6 @@ const next = () => {
     restart();
   }
 };
+provide('next', next);
+
 </script>
