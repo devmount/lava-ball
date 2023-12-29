@@ -13,10 +13,10 @@
           {{ t('steps') }}
         </div>
       </div>
-      <button @click="emit('restart')">
+      <button @click="restart()">
         {{ t('restartLevel') }}
       </button>
-      <button v-if="debug" @click="emit('next')">
+      <button v-if="debug" @click="next()">
         {{ t('nextLevel') }}
       </button>
     </div>
@@ -28,7 +28,7 @@
         <div class="text-4xl font-bungee">{{ score }}</div>
         <div class="uppercase tracking-widest">{{ t('points') }}</div>
       </div>
-      <button @click="emit('reset')">
+      <button @click="reset(true, false, true)">
         {{ t('newGame') }}
       </button>
     </div>
@@ -36,10 +36,14 @@
 </template>
 
 <script setup>
+import { inject } from 'vue';
 import { useI18n } from 'vue-i18n';
 import Brand from "@/components/Brand.vue";
+
 const { t } = useI18n();
+const restart = inject('restart');
+const reset = inject('reset');
+const next = inject('next');
 
 defineProps(['level', 'steps', 'score', 'debug']);
-const emit = defineEmits(['restart', 'next', 'reset']);
 </script>

@@ -84,15 +84,7 @@
       <ball ref="ball" :color="player.color" :exit="finished || trapped" />
     </div>
     <!-- dashboard -->
-    <dashboard
-      :level="game.level"
-      :steps="player.steps"
-      :score="game.score"
-      :debug="debug"
-      @restart="restart()"
-      @next="next()"
-      @reset="reset(true, false, true)"
-    />
+    <dashboard :level="game.level" :steps="player.steps" :score="game.score" :debug="debug" />
     <!-- modal -->
     <modal :active="game.finished">
       <div class="text-center">
@@ -125,7 +117,7 @@
 </template>
 
 <script setup>
-import { reactive, ref, onMounted, computed } from 'vue';
+import { reactive, ref, onMounted, computed, provide } from 'vue';
 import { useI18n } from 'vue-i18n';
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import Modal from "@/components/Modal.vue";
@@ -276,6 +268,7 @@ const restart = (keepGameScore=true, keepLevelScore=false) => {
   game.finished = false;
   board.value.focus();
 };
+provide('restart', restart);
 
 // move player to given position, if game isn't already finished
 const go = (x, y) => {
@@ -327,6 +320,8 @@ const reset = () => {
   game.started = false;
   restart();
 };
+provide('reset', reset);
+
 // go to next level
 const next = () => {
   if (!game.started) {
@@ -337,4 +332,6 @@ const next = () => {
     restart();
   }
 };
+provide('next', next);
+
 </script>
