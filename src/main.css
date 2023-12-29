@@ -41,3 +41,6 @@
 .block {
   @apply bg-stone-950 border-12 border-t-stone-800/60 border-l-stone-800/60 border-b-black border-r-black shadow-xl shadow-black/70;
 }
+.gold {
+  @apply after:bg-yellow-600 after:absolute after:top-3 after:left-3 after:size-10 after:animate-glow after:z-10 after:border-12 after:border-t-stone-800/30 after:border-l-stone-800/30 after:border-b-white/30 after:border-r-white/30 after:transition-all after:duration-500;
+}

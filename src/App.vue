@@ -15,7 +15,10 @@
     class="relative bg-black w-screen h-screen flex justify-center items-center gap-20"
   >
     <!-- start section -->
-    <div v-if="!game.started" class="absolute z-50 size-full bg-black flex flex-col justify-center items-center gap-8">
+    <div
+      v-if="!game.started"
+      class="absolute z-50 size-full bg-black flex flex-col justify-center items-center gap-8"
+    >
       <brand />
       <div class="block w-1/2 p-16 flex justify-center items-center gap-16">
         <div class="flex flex-col gap-8">
@@ -65,7 +68,7 @@
             // lava trap
             'bg-lava animate-waft shadow-inner-lg shadow-black ': isTrap(x, y),
             // target and target glow
-            'bg-carbon after:bg-yellow-600 after:absolute after:top-3 after:left-3 after:size-10 after:animate-glow after:z-10 after:border-12 after:border-t-stone-800/30 after:border-l-stone-800/30 after:border-b-white/30 after:border-r-white/30 after:transition-all after:duration-500': isTarget(x, y),
+            'bg-carbon gold': isTarget(x, y),
             // target reached
             'bg-carbon after:!size-0 after:!border-0 after:top-8 after:left-8': isTarget(x, y) && finished,
             // normal ground
@@ -220,7 +223,8 @@ const isBlocked = (x, y) => {
   return false;
 };
 
-// check if cell is background cell (not functional and not accessible due to completely surrounded by blocked cells)
+// check if cell is background cell
+// (not functional and not accessible due to completely surrounded by blocked cells)
 const isBackground = (x, y) => {
   for (let i = 0; i < map[game.level].background.length; i++) {
     const b = map[game.level].background[i];
