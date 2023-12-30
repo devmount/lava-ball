@@ -1,8 +1,9 @@
+import { computed } from 'vue';
 import { defineStore } from 'pinia';
 import { useLocalStorage } from '@vueuse/core';
+import map from '@/map';
 
 export const useGameStore = defineStore('game', () => {
-  // const isLastLevel = computed(() => game.level == Object.keys(map).length);
   // persist game state in localStorage
   const core = useLocalStorage(
     'lavaball/core',
@@ -24,5 +25,8 @@ export const useGameStore = defineStore('game', () => {
     },
   );
 
-  return { core, char }
+  // true if last level is reached
+  const isLastLevel = computed(() => core.value.level == Object.keys(map).length);
+
+  return { core, char, isLastLevel }
 })

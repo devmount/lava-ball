@@ -88,19 +88,19 @@
     <!-- modal -->
     <modal :active="game.core.finished">
       <div class="text-center">
-        <div v-if="!isLastLevel" class="text-5xl font-bungee">
+        <div v-if="!game.isLastLevel" class="text-5xl font-bungee">
           {{ t('levelCompleted', [game.core.level]) }}
         </div>
         <div v-else class="text-5xl font-bungee">
           {{ t('gameFinished') }}
         </div>
         <div>
-          <p v-if="!isLastLevel">{{ t('youHavePoints', [game.core.score]) }}</p>
+          <p v-if="!game.isLastLevel">{{ t('youHavePoints', [game.core.score]) }}</p>
           <p v-else>{{ t('youFinishedWithPoints', [game.core.score]) }}</p>
         </div>
         <div class="mt-8">
           <button class="mr-4" @click="restart(false)">{{ t('restartLevel') }}</button>
-          <button-primary v-if="!isLastLevel" @click="next">{{ t('nextLevel') }}</button-primary>
+          <button-primary v-if="!game.isLastLevel" @click="next">{{ t('nextLevel') }}</button-primary>
           <button-primary v-else @click="reset">{{ t('newGame') }}</button-primary>
         </div>
       </div>
@@ -124,14 +124,11 @@ import Ball from "@/components/Ball.vue";
 import Brand from "@/components/Brand.vue";
 import ButtonPrimary from "@/components/ButtonPrimary.vue";
 import Dashboard from "@/components/Dashboard.vue";
-import level from '@/level';
+import map from '@/map';
 import Modal from "@/components/Modal.vue";
 
 const game = useGameStore();
 const { t } = useI18n();
-
-// fixed map configuration per level
-const map = level;
 
 // define board for focus for hotkey support
 const board = ref(null);
@@ -173,11 +170,6 @@ const trapped = computed(() => {
     }
   });
   return trapped;
-});
-
-// calculate if current level is the last one
-const isLastLevel = computed(() => {
-  return game.core.level == Object.keys(map).length;
 });
 
 onMounted(() => {
@@ -322,7 +314,7 @@ const next = () => {
   if (!game.core.started) {
     start();
   }
-  if (!isLastLevel.value && finished.value || debug.value) {
+  if (!game.isLastLevel && finished.value || debug.value) {
     game.core.level++;
     restart();
   }
