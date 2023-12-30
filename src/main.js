@@ -1,4 +1,5 @@
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from '@/App.vue';
 
 // init basic css with tailwind imports
@@ -9,6 +10,10 @@ const app = createApp(App);
 
 // set global properties
 app.config.globalProperties.$version = APP_VERSION;
+
+// stores
+const pinia = createPinia();
+app.use(pinia);
 
 // translations
 import de from '@/locales/de.json';
