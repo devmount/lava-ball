@@ -156,6 +156,7 @@ const eq = (a,b) => {
 const finished = computed(() => {
   if (eq(map[game.core.level].target, [player.x, player.y])) {
     game.core.score += player.steps;
+    game.core.unlocked = Math.max(game.core.level, game.core.unlocked);
     setTimeout(() => game.core.finished = true, 1000);
     return true;
   } else {
@@ -167,7 +168,7 @@ const finished = computed(() => {
 const trapped = computed(() => {
   let trapped = false;
   map[game.core.level].trap.forEach(t => {
-    if (eq(t, player)) {
+    if (eq(t, [player.x, player.y])) {
       trapped = true;
     }
   });
@@ -182,6 +183,7 @@ const isLastLevel = computed(() => {
 onMounted(() => {
   player.x = map[game.core.level].start[0];
   player.y = map[game.core.level].start[1];
+  game.core.init = true;
   // initial position of player, one cell is 4x basic unit
   ball.value.el.style.left = 4*player.x + 'rem';
   ball.value.el.style.top = 4*player.y + 'rem';
