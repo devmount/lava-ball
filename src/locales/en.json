@@ -10,6 +10,7 @@
   "startGame": "Start Game",
   "steps": "Steps",
   "total": "Total",
+  "unlocked": "Unlocked",
   "youFinishedWithPoints": "Congratulation! You finished the game with {0} points.",
   "youHavePoints": "You currently have {0} points."
 }
