@@ -20,11 +20,11 @@
       class="absolute z-50 size-full bg-black flex flex-col justify-center items-center gap-8"
     >
       <brand />
-      <div class="block w-1/2 p-16 flex flex-col justify-center items-center gap-16">
-        <div class="flex justify-center items-center gap-16">
+      <div class="block w-1/2 p-16 flex flex-col justify-center items-start gap-16">
+        <div class="self-stretch flex justify-between items-center gap-16">
           <color-selection />
           <div
-            class="size-44 shrink-0 rounded-full bg-gradient-to-br animate-bounce"
+            class="size-32 shrink-0 rounded-full bg-gradient-to-br animate-bounce"
             :class="{
               'from-rose-500 to-rose-700': game.char.color === 1,
               'from-green-500 to-green-700': game.char.color === 2,
@@ -32,8 +32,8 @@
             }"
           ></div>
         </div>
+        <level-overview />
       </div>
-      <level-overview />
     </div>
     <!-- map section -->
     <div id="map" class="flex justify-center items-center relative">

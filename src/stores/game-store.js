@@ -30,12 +30,12 @@ export const useGameStore = defineStore('game', () => {
   const isLastLevel = computed(() => core.value.level == Object.keys(map).length);
 
   // check if given cell is blocked (not accessible by player)
-  const isBlocked = (x, y) => {
-    if (x==0 || y==0 || x==map[core.value.level].size[0]+1 || y==map[core.value.level].size[1]+1) {
+  const isBlocked = (x, y, level=core.value.level) => {
+    if (x==0 || y==0 || x==map[level].size[0]+1 || y==map[level].size[1]+1) {
       return true;
     }
-    for (let i = 0; i < map[core.value.level].blocked.length; i++) {
-      const block = map[core.value.level].blocked[i];
+    for (let i = 0; i < map[level].blocked.length; i++) {
+      const block = map[level].blocked[i];
       if (eq(block, [x,y])) {
         return true;
       }
@@ -45,9 +45,9 @@ export const useGameStore = defineStore('game', () => {
 
   // check if cell is background cell
   // (not functional and not accessible due to completely surrounded by blocked cells)
-  const isBackground = (x, y) => {
-    for (let i = 0; i < map[core.value.level].background.length; i++) {
-      const b = map[core.value.level].background[i];
+  const isBackground = (x, y, level=core.value.level) => {
+    for (let i = 0; i < map[level].background.length; i++) {
+      const b = map[level].background[i];
       if (eq(b, [x,y])) {
         return true;
       }
@@ -56,9 +56,9 @@ export const useGameStore = defineStore('game', () => {
   };
 
   // check if given cell is a trap (player dies)
-  const isTrap = (x, y) => {
-    for (let i = 0; i < map[core.value.level].trap.length; i++) {
-      const trap = map[core.value.level].trap[i];
+  const isTrap = (x, y, level=core.value.level) => {
+    for (let i = 0; i < map[level].trap.length; i++) {
+      const trap = map[level].trap[i];
       if (eq(trap, [x,y])) {
         return true;
       }
@@ -67,18 +67,18 @@ export const useGameStore = defineStore('game', () => {
   };
 
   // check if cell is level start
-  const isStart = (x, y) => {
-    return eq(map[core.value.level].start, [x,y]);
+  const isStart = (x, y, level=core.value.level) => {
+    return eq(map[level].start, [x,y]);
   };
 
   // check if cell is level goal
-  const isTarget = (x, y) => {
-    return eq(map[core.value.level].target, [x,y]);
+  const isTarget = (x, y, level=core.value.level) => {
+    return eq(map[level].target, [x,y]);
   };
 
   // check if cell is normal ground
-  const isGround = (x, y) => {
-    return !isBlocked(x, y) && !isBackground(x, y) && !isTrap(x, y) && !isTarget(x, y);
+  const isGround = (x, y, level=core.value.level) => {
+    return !isBlocked(x, y, level) && !isBackground(x, y, level) && !isTrap(x, y, level) && !isTarget(x, y, level);
   };
 
   return {

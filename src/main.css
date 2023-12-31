@@ -11,6 +11,9 @@
 }
 
 @layer base {
+  html, body {
+    color-scheme: dark;
+  }
   button {
     @apply
       border border-rose-600 rounded text-rose-500 cursor-pointer px-3 py-2 transition-all
