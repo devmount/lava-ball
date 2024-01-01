@@ -151,7 +151,8 @@ const trapped = computed(() => {
   return trapped;
 });
 
-onMounted(() => {
+// initialize level and ball position
+const init = () => {
   player.x = map[game.core.level].start[0];
   player.y = map[game.core.level].start[1];
   game.core.init = true;
@@ -160,13 +161,11 @@ onMounted(() => {
   ball.value.el.style.top = 4*player.y + 'rem';
   // set focus to game to handle key events
   board.value.focus();
-});
-
-const start = () => {
-  game.core.started = true;
-  board.value.focus();
 };
-provide('start', start);
+
+onMounted(() => {
+  init();
+});
 
 // restart level by setting player position to start and initialize level
 const restart = (keepGameScore=true, keepLevelScore=false) => {
@@ -178,12 +177,20 @@ const restart = (keepGameScore=true, keepLevelScore=false) => {
   if (!keepLevelScore) {
     player.steps = -1;
   }
-  go(player.x, player.y)
+  go(player.x, player.y);
   game.core.init = true;
   game.core.finished = false;
   board.value.focus();
 };
 provide('restart', restart);
+
+// start game after color and level selection
+const start = () => {
+  init();
+  game.core.started = true;
+  restart(true, true);
+};
+provide('start', start);
 
 // move player to given position, if game isn't already finished
 const go = (x, y) => {

@@ -9,7 +9,7 @@
           cursor-pointer hover:outline-stone-800
         "
         :class="{
-          'outline outline-8 !outline-stone-700': game.core.level === key,
+          '!outline-stone-700': game.core.level == key,
         }"
         @click="setLevel(key)"
       >
@@ -34,7 +34,7 @@
         </div>
       </div>
       <div
-        v-for="(level, key) in lockedLevels"
+        v-for="_ in lockedLevels"
         class="cursor-default size-8 flex justify-center items-center"
       >
         <div class="text-stone-600 text-xl font-bungee">?</div>
@@ -51,10 +51,12 @@ import map from '@/map';
 const { t } = useI18n();
 
 const game = useGameStore();
+
 const unlockedLevels = Object.keys(map).reduce((r, e) => {
   if (e <= game.core.unlocked) r[e] = map[e];
   return r;
 }, {});
+
 const lockedLevels = Object.keys(map).reduce((r, e) => {
   if (e > game.core.unlocked) r[e] = map[e];
   return r;
