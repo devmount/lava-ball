@@ -28,7 +28,7 @@
         <div class="text-4xl font-bungee">{{ score }}</div>
         <div class="uppercase tracking-widest">{{ t('points') }}</div>
       </div>
-      <button @click="reset(true, false, true)">
+      <button @click="reset()">
         {{ t('newGame') }}
       </button>
     </div>

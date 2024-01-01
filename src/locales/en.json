@@ -1,5 +1,6 @@
 {
   "chooseColor": "Choose a color",
+  "chooseLevel": "Choose a level",
   "gameFinished": "Game finished!",
   "level": "Level",
   "levelCompleted": "Level {0} competed!",
@@ -10,6 +11,7 @@
   "startGame": "Start Game",
   "steps": "Steps",
   "total": "Total",
+  "unlocked": "Unlocked",
   "youFinishedWithPoints": "Congratulation! You finished the game with {0} points.",
   "youHavePoints": "You currently have {0} points."
 }
