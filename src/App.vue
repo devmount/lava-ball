@@ -33,6 +33,9 @@
           ></div>
         </div>
         <level-overview />
+        <button-primary @click="start()" class="ml-4 self-center">
+          {{ t('startGame') }}
+        </button-primary>
       </div>
     </div>
     <!-- map section -->
@@ -88,7 +91,7 @@
     </modal>
     <!-- footer -->
     <footer>
-      <div class="cursor-pointer fixed bottom-2 right-2" @click="debug = !debug">
+      <div class="cursor-pointer text-transparent fixed bottom-2 right-2" @click="debug = !debug">
         Debug Mode
         <span v-show="debug">On</span>
         <span v-show="!debug">Off</span>

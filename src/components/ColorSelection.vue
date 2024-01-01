@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col gap-8">
     <div class="text-stone-600 text-4xl font-bungee">{{ t('chooseColor') }}</div>
-    <div class="flex justify-center items-center gap-4">
+    <div class="flex justify-start items-center gap-4">
       <div
         class="
           cursor-pointer transition-all size-10 border-4 outline outline-8 outline-transparent
@@ -26,9 +26,6 @@
         :class="{ '!outline-stone-700': game.char.color === 3 }"
         @click="game.char.color = 3"
       ></div>
-      <button @click="start()" class="ml-4">
-        {{ t('startGame') }}
-      </button>
     </div>
   </div>
 </template>
@@ -40,5 +37,4 @@ import { useI18n } from 'vue-i18n';
 
 const { t } = useI18n();
 const game = useGameStore();
-const start = inject('start');
 </script>
