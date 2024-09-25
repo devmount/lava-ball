@@ -134,9 +134,6 @@ const debug = ref(false);
 // calculate if game is finished (player reached goal)
 const finished = computed(() => {
   if (eq(map[game.core.level].target, [player.x, player.y])) {
-    game.core.score += player.steps;
-    game.core.unlocked = Math.max(game.core.level, game.core.unlocked);
-    setTimeout(() => game.core.finished = true, 1000);
     return true;
   } else {
     return false;
@@ -205,9 +202,15 @@ const go = (x, y) => {
     player.steps++;
     ball.value.el.style.left = 4*x + 'rem';
     ball.value.el.style.top = 4*y + 'rem';
-    // player dies if trapped, level restart by keeping score
+    // player dies if trapped now, level restart by keeping score
     if (trapped.value) {
       setTimeout(() => restart(true, true), 1000);
+    }
+    // player wins if finished now, go to next level
+    if (finished.value) {
+      game.core.score += player.steps;
+      game.core.unlocked = Math.max(game.core.level, game.core.unlocked);
+      setTimeout(() => game.core.finished = true, 1000);
     }
   }
 };
