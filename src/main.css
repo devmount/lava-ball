@@ -1,13 +1,87 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-@font-face {
-  font-family: 'Bungee';
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url(./assets/Bungee-Regular.ttf);
+@theme {
+  --animate-wave-once: wave 1s both;
+  --animate-idle: idle 1s 0s infinite cubic-bezier(0.65, 0.05, 0.36, 1)
+    alternate;
+  --animate-glow: glow 2s 0s infinite linear alternate;
+  --animate-waft: waft 2s 0s infinite linear alternate;
+
+  --border-width-12: 12px;
+  --border-width-32: 32px;
+
+  --shadow-inner-lg: inset 4px 4px 16px 4px rgb(0 0 0 / 0.15);
+
+  --font-bungee: Bungee, cursive;
+
+  @keyframes wave {
+    0%, 100% {
+      transform: scaleX(1);
+    }
+    10%, 20% {
+      transform: scale3d(0.9, 0.9, 0.9) rotate(-3deg);
+    }
+    30%, 60%, 90% {
+      transform: scale3d(1.1, 1.1, 1.1) rotate(3deg);
+    }
+    45%, 75% {
+      transform: scale3d(1.1, 1.1, 1.1) rotate(-3deg);
+    }
+  }
+  @keyframes idle {
+    0% {
+      top: 0.5rem;
+      box-shadow: 0 0.6rem 2.4rem 0 #000;
+    }
+    100% {
+      top: 0;
+      box-shadow: 0 1.6rem 2.4rem 0 #000;
+    }
+  }
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 0.8rem -0.4rem yellow;
+    }
+    100% {
+      box-shadow: 0 0 2rem -0.4rem yellow;
+    }
+  }
+  @keyframes waft {
+    0% {
+      background-color: #991b1b;
+    }
+    100% {
+      background-color: #ef4444;
+    }
+  }
+}
+
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+}
+
+@layer utilities {
+  @font-face {
+    font-family: 'Bungee';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url(./assets/Bungee-Regular.ttf);
+  }
 }
 
 @layer base {
@@ -16,10 +90,10 @@
   }
   button {
     @apply
-      border border-rose-600 rounded text-rose-500 cursor-pointer px-3 py-2 transition-all
+      border border-rose-600 rounded-sm text-rose-500 cursor-pointer px-3 py-2 transition-all
       select-none whitespace-nowrap uppercase tracking-widest
-      hover:outline outline-8 outline-offset-1 outline-rose-500/20
-      hover:text-rose-400 hover:bg-rose-900/50 active:!text-white active:!bg-rose-900;
+      hover:outline hover:outline-8 hover:outline-offset-1 hover:outline-rose-500/20
+      hover:text-rose-400 hover:bg-rose-900/50 active:text-white! active:bg-rose-900!;
   }
 }
 
@@ -45,5 +119,5 @@
   @apply bg-stone-950 border-12 border-t-stone-800/60 border-l-stone-800/60 border-b-black border-r-black shadow-xl shadow-black/70;
 }
 .gold {
-  @apply after:bg-yellow-600 after:absolute after:top-3 after:left-3 after:size-10 after:animate-glow after:z-10 after:border-12 after:border-t-stone-800/30 after:border-l-stone-800/30 after:border-b-white/30 after:border-r-white/30 after:transition-all after:duration-500;
+  @apply after:bg-yellow-600 after:absolute after:inset-1/2 after:-translate-1/2 after:size-10 after:animate-glow after:z-10 after:border-12 after:border-t-stone-800/30 after:border-l-stone-800/30 after:border-b-white/30 after:border-r-white/30 after:transition-all after:duration-500;
 }

@@ -9,7 +9,7 @@
           cursor-pointer hover:outline-stone-800
         "
         :class="{
-          '!outline-stone-700': game.core.level == key,
+          'outline-stone-700!': game.core.level == key,
         }"
         @click="setLevel(key)"
       >
@@ -21,7 +21,7 @@
               // unreachable block
               'bg-stone-950': game.isBlocked(x, y, key),
               // background like field
-              '!bg-transparent': game.isBackground(x, y, key),
+              'bg-transparent!': game.isBackground(x, y, key),
               // lava trap
               'bg-red-800 ': game.isTrap(x, y, key),
               // target and target glow

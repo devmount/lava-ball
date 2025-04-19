@@ -7,7 +7,7 @@
           cursor-pointer transition-all size-10 border-4 outline outline-8 outline-transparent
           border-rose-700 bg-rose-500 hover:outline-stone-800
         "
-        :class="{ '!outline-stone-700': game.char.color === 1 }"
+        :class="{ 'outline-stone-700!': game.char.color === 1 }"
         @click="game.char.color = 1"
       ></div>
       <div
@@ -15,7 +15,7 @@
           cursor-pointer transition-all size-10 border-4 outline outline-8 outline-transparent
           border-green-700 bg-green-500 hover:outline-stone-800
         "
-        :class="{ '!outline-stone-700': game.char.color === 2 }"
+        :class="{ 'outline-stone-700!': game.char.color === 2 }"
         @click="game.char.color = 2"
       ></div>
       <div
@@ -23,7 +23,7 @@
           cursor-pointer transition-all size-10 border-4 outline outline-8 outline-transparent
           border-violet-700 bg-violet-500 hover:outline-stone-800
         "
-        :class="{ '!outline-stone-700': game.char.color === 3 }"
+        :class="{ 'outline-stone-700!': game.char.color === 3 }"
         @click="game.char.color = 3"
       ></div>
     </div>
