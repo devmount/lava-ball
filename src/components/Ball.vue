@@ -9,7 +9,7 @@
         'from-rose-500 to-rose-700': color === 1,
         'from-green-500 to-green-700': color === 2,
         'from-violet-500 to-violet-700': color === 3,
-        'top-5 animate-none shadow-sm size-0! opacity-0': exit,
+        'top-5! animate-none shadow-sm size-0! opacity-0': exit,
       }"
     ></div>
   </div>

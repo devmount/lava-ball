@@ -54,7 +54,7 @@
             // target and target glow
             'bg-carbon gold': game.isTarget(x, y),
             // target reached
-            'bg-carbon after:size-0! after:border-0! after:top-8 after:left-8': game.isTarget(x, y) && finished,
+            'bg-carbon after:size-0! after:border-0!': game.isTarget(x, y) && finished,
             // normal ground
             'bg-carbon border border-stone-900/50': game.isGround(x, y) || (game.isStart(x, y) && game.core.init),
           }"
