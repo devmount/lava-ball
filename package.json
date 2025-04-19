@@ -8,6 +8,7 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.1.4",
     "@vueuse/core": "^13.1.0",
     "pinia": "^3.0.2",
     "vue": "^3.2.28",
