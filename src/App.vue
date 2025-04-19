@@ -24,7 +24,7 @@
         <div class="self-stretch flex justify-between items-center gap-16">
           <color-selection />
           <div
-            class="size-32 shrink-0 rounded-full bg-gradient-to-br animate-bounce"
+            class="size-32 shrink-0 rounded-full bg-linear-to-br animate-bounce"
             :class="{
               'from-rose-500 to-rose-700': game.char.color === 1,
               'from-green-500 to-green-700': game.char.color === 2,
@@ -48,13 +48,13 @@
             // unreachable block and start after first move
             'block z-10': game.isBlocked(x, y) && !(game.isStart(x, y) && game.core.init),
             // background like field
-            '!bg-transparent !border-none': game.isBackground(x, y),
+            'bg-transparent! border-none!': game.isBackground(x, y),
             // lava trap
             'bg-lava animate-waft shadow-inner-lg shadow-black ': game.isTrap(x, y),
             // target and target glow
             'bg-carbon gold': game.isTarget(x, y),
             // target reached
-            'bg-carbon after:!size-0 after:!border-0 after:top-8 after:left-8': game.isTarget(x, y) && finished,
+            'bg-carbon after:size-0! after:border-0! after:top-8 after:left-8': game.isTarget(x, y) && finished,
             // normal ground
             'bg-carbon border border-stone-900/50': game.isGround(x, y) || (game.isStart(x, y) && game.core.init),
           }"
@@ -132,13 +132,7 @@ const ball = ref(null);
 const debug = ref(false);
 
 // calculate if game is finished (player reached goal)
-const finished = computed(() => {
-  if (eq(map[game.core.level].target, [player.x, player.y])) {
-    return true;
-  } else {
-    return false;
-  }
-});
+const finished = computed(() => eq(map[game.core.level].target, [player.x, player.y]));
 
 // calculate if player is trapped (player dies, level restarts)
 const trapped = computed(() => {
