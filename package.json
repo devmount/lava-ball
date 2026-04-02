@@ -19,7 +19,7 @@
     "@vitejs/plugin-vue": "^6.0.0",
     "postcss": "^8.4.32",
     "tailwindcss": "^4.1.4",
-    "vite": "^7.0.5"
+    "vite": "^8.0.3"
   },
   "postcss": {
     "plugins": {
