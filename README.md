@@ -13,17 +13,17 @@ Use the arrow keys to navigate a little ball to the gold mine. But be warned: th
 ## Project setup
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Compiles and hot-reloads for development
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 ### Compiles and minifies for production
 
 ```bash
-npm run build
+pnpm build
 ```
