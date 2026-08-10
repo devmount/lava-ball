@@ -23,7 +23,7 @@ jobs:
         cache: pnpm
     - name: Build app via pnpm
       run: |
-        pnpm install
+        pnpm install --frozen-lockfile
         pnpm run build
     - name: Push Build files to production
       uses: burnett01/rsync-deployments@v8
