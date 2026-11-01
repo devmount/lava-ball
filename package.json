@@ -2,25 +2,27 @@
   "name": "lava-ball",
   "version": "0.5.3",
   "private": true,
-  "packageManager": "pnpm@11.21.0",
+  "packageManager": "pnpm@12.16.1",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "lint": "oxlint"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.3.3",
-    "@vueuse/core": "^14.4.0",
-    "pinia": "^4.0.2",
-    "vue": "^3.5.41",
-    "vue-i18n": "^11.4.8"
+    "@vueuse/core": "^15.0.0",
+    "pinia": "^4.1.0",
+    "vue": "^3.5.44",
+    "vue-i18n": "^11.4.16"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4.3.3",
-    "@vitejs/plugin-vue": "^6.0.8",
-    "postcss": "^8.5.26",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "oxlint": "^1.90.0",
+    "postcss": "^8.5.32",
     "tailwindcss": "^4.3.3",
-    "vite": "^8.2.1"
+    "vite": "^8.3.5"
   },
   "postcss": {
     "plugins": {
